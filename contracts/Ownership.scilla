@@ -4,25 +4,25 @@ scilla_version 0
 (* deploy with an owner. Check if _sender is owner. Transfer ownership  *)
 (************************************************************************)
 
-  
+
 contract Ownership
-(owner_at_deployment: ByStr20) (* immutable *) 
+(owner_at_deployment: ByStr20) (* immutable *)
 
 (* mutable fields declarations *)
 field owner : ByStr20 = owner_at_deployment (* the current owner *)
-field was_owner: Bool = True
 
+(* emit an event showing both the sender and the owner, and a bool if they equal *)
 transition foo()
   o <- owner;
   is_owner = builtin eq _sender o;
-  was_owner := is_owner;
-  ev = {_eventname: "foo"; sender: _sender; owner: o; was_owner: is_owner};
-  event ev 
+  ev = {_eventname: "foo"; sender: _sender; owner: o; called_by_owner: is_owner};
+  event ev
 end
 
+(* change ownership: everyone can do this, not just the actual owner *)
 transition change_owner(new_owner : ByStr20)
   old <- owner;
   owner := new_owner;
   ev = {_eventname: "change_owner"; sender: _sender; old_owner: old; new_owner: new_owner};
-  event ev 
+  event ev
 end
