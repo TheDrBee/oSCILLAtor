@@ -4,25 +4,39 @@ scilla_version 0
 (* List operations                                 *)
 (***************************************************)
 
-import ListUtils
+import ListUtils BoolUtils
 
 library List
 
 let empty_list = Nil {Uint32}
 
+let list123 =
+  let one   = Uint32 1 in
+  let two   = Uint32 2 in
+  let three = Uint32 3 in
+  let l3 = Cons {Uint32} three empty_list in (* insert in front *)
+  let l23 = Cons {Uint32} two l3 in
+  Cons {Uint32} one l23
+
+let not_equal = fun (a: Uint32) => fun(b: Uint32) =>
+  let equal = builtin eq a b in
+  negb equal (* from BoolUtils *)
+
 contract List()
 
-field l : List Uint32 = empty_list
+field list : List Uint32 = empty_list
 
+(* create a list [1,2,3] and store in field list *)
 transition create123()
-  one   = Uint32 1;
-  two   = Uint32 2;
-  three = Uint32 3;
+  l = list123;
+  list := l
+end
 
-  ll = empty_list;
-  l3 = Cons {Uint32} three empty_list; (* insert in front *)
-  l23 = Cons {Uint32} two l3;
-  l123 = Cons {Uint32} one l23;
-
-  l := l123
+(* remove elements from list that equal to value *)
+transition remove_if_equal_to(value: Uint32)
+  f = not_equal value;
+  filterUint32 = @list_filter Uint32;
+  l <- list;
+  list_without_values = filterUint32 f l;
+  list := list_without_values
 end
