@@ -1,0 +1,28 @@
+scilla_version 0
+
+(***************************************************)
+(* List operations                                 *)
+(***************************************************)
+
+import ListUtils
+
+library List
+
+let empty_list = Nil {Uint32}
+
+contract List()
+
+field l : List Uint32 = empty_list
+
+transition create123()
+  one   = Uint32 1;
+  two   = Uint32 2;
+  three = Uint32 3;
+
+  ll = empty_list;
+  l3 = Cons {Uint32} three empty_list; (* insert in front *)
+  l23 = Cons {Uint32} two l3;
+  l123 = Cons {Uint32} one l23;
+
+  l := l123
+end

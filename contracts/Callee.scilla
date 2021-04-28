@@ -1,0 +1,37 @@
+scilla_version 0
+
+
+(***************************************************)
+(* transition get_value() is called by another     *)
+(* contract "caller" and calls back transition     *)
+(* value_callback(.) of it with value              *)
+(***************************************************)
+library Callee
+let zero = Uint128 0 (* will not send any amount *)
+(* Wrap single message into singleton list *)
+let one_msg =
+  fun (msg : Message) =>
+    let nil_msg = Nil {Message} in
+    Cons {Message} msg nil_msg
+
+
+(***************************************************)
+contract Callee()
+
+field value: Uint128 = Uint128 0 
+
+(* the transition to be called by the Caller contract: 
+   calls the caller's "value_callback(v)" with the value *)
+transition get_value()
+  val <- value;
+  msg = {_tag : "value_callback"; _recipient : _sender; _amount : zero; v: val};
+  msgs = one_msg msg;
+  send msgs
+end
+
+(* set the value (initially it is 0) *)
+transition set_value(new_value : Uint128)
+  value := new_value;
+  e = {_eventname : "set_value()"; value : new_value};
+  event e
+end
