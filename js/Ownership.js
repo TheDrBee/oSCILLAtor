@@ -9,7 +9,7 @@ async function run()
 {
   async function call_foo()
   {
-    tx = await sc_call(sc, "foo");
+    const tx = await sc_call(sc, "foo");
     console.log(`event_logs[0].params[2].value after call to foo() from account 0:\n:\n`,
       tx.receipt.event_logs[0].params[2]);
   }

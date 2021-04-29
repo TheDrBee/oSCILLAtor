@@ -20,6 +20,7 @@ The [List smart contract](./contracts/List.scilla) shows list manipulations and 
 - construct a list using `Nil` and `Cons`
 - remove elments from a list that equal a value, showing the application of a predicate and a curried function
 
+Script: [List.js](./js/List.js).
 
 ## Ownership
 The [Ownership smart contract](./contracts/Ownership.scilla) shows how a smart contract can have an owner, and how to check if the caller of a transition (the `_sender` of the transaction) is the owner.
