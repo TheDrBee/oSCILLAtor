@@ -8,12 +8,21 @@ Scripts using the [Zilliqa JS lib](https://github.com/Zilliqa/Zilliqa-JavaScript
 
 ## Callback
 How to send a message to another smart contract and get a result back:
-[The caller](./contracts/Caller.scilla) calls [the callee](./contracts/Callee.scilla) to retrieve a value:
+The [Caller smart contract](./contracts/Caller.scilla) calls The [Callee smart contract](./contracts/Callee.scilla) to retrieve a value:
 1) caller sends msg to callee's transition `get_value` in its transition `call_for_value()`.
 2) callee sends msg to caller's callback: transition `value_callback(v : Uint128)` with `v` the value stored in its `field value`.
 3) the caller receive the value, stores it in its `field value` and emits an event.
 
 Script: [Callback.js](./js/Callback.js). 
+
+## Funds
+How to send/receive funds (native ZIL in units of QA with 1 ZIL = 10^12 QA) to/from a smart contract:
+The [Funds smart contract](./contracts/Funds.scilla) offers transitions to
+- send funds to it: `deposit()`
+- withdraw an amount of funds from it: `withdraw(amount: Uint128)`
+- withdraw all funds ("empty it"): `empty()`.
+
+Script: [Funds.js](./js/Funds.js).
 
 ## List
 The [List smart contract](./contracts/List.scilla) shows list manipulations and use cases of the library `ListUtils`
