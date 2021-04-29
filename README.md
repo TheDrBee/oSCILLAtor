@@ -2,7 +2,7 @@
 
 Exampes and Snippets of the [scilla programming language](https://scilla.readthedocs.io/en/latest/).
 
-Contracts are all in folder `contracts/`. 
+Contracts are all in folder `contracts/`.
 
 Scripts using the [Zilliqa JS lib](https://github.com/Zilliqa/Zilliqa-JavaScript-Library) that deploy the contracts and interact with them through their transitions are in folder `js/`. They are run in that directory using: `node <ScriptName.js>`.
 
@@ -13,7 +13,7 @@ The [Caller smart contract](./contracts/Caller.scilla) calls The [Callee smart c
 2) callee sends msg to caller's callback: transition `value_callback(v : Uint128)` with `v` the value stored in its `field value`.
 3) the caller receive the value, stores it in its `field value` and emits an event.
 
-Script: [Callback.js](./js/Callback.js). 
+Script: [Callback.js](./js/Callback.js).
 
 ## Funds
 How to send/receive funds (native ZIL in units of QA with 1 ZIL = 10^12 QA) to/from a smart contract:
