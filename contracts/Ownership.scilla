@@ -1,10 +1,7 @@
 scilla_version 0
-
 (************************************************************************)
 (* deploy with an owner. Check if _sender is owner. Transfer ownership  *)
 (************************************************************************)
-
-
 contract Ownership
 (owner_at_deployment: ByStr20) (* immutable *)
 

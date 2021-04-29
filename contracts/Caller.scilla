@@ -1,12 +1,10 @@
 scilla_version 0
-
-
 (***************************************************)
 (* call transition get_value() of another contract *)
 (* "Callee" and get called back in value_callback()*)
 (***************************************************)
 library Caller
-let zero = Uint128 0 (* will not send any amount *)
+let zero = Uint128 0
 (* Wrap single message into singleton list *)
 let one_msg =
   fun (msg : Message) =>
@@ -15,13 +13,10 @@ let one_msg =
 
 (***************************************************)
 contract Caller
-( 
-  init_callee : ByStr20
-)
+( init_callee : ByStr20 )
 
 field callee: ByStr20 = init_callee
-field value: Uint128 = Uint128 0 
-
+field value: Uint128 = Uint128 0
 
 (* calls the callee and ask to call back with value *)
 transition call_for_value()
@@ -30,16 +25,9 @@ transition call_for_value()
   msgs = one_msg msg;
   send msgs
 end
-
+(* callback called by callee with value v *)
 transition value_callback(v : Uint128)
   value := v;
   e = {_eventname : "value_callback()"; new_value : v};
-  event e
-end
-
-
-transition update_callee(new_address : ByStr20)
-  callee := new_address;
-  e = {_eventname : "update_callee()"; address : new_address};
   event e
 end

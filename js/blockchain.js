@@ -27,6 +27,7 @@ const setup = () =>
   return s;
 }
 
+// will use same tx settings for all tx's
 const tx_settings = {
   "gas_price": units.toQa('2000', units.Units.Li),
   "gas_limit": Long.fromNumber(50000),
