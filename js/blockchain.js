@@ -1,38 +1,29 @@
 const { Zilliqa } = require('@zilliqa-js/zilliqa');
 const fs = require('fs');
-const { BN, units, bytes } = require('@zilliqa-js/util');
+const { BN, Long, units, bytes } = require('@zilliqa-js/util');
 const {
   getAddressFromPrivateKey,
   getPubKeyFromPrivateKey } = require('@zilliqa-js/crypto');
 
 // chain setup on ceres locally run isolated server, see https://dev.zilliqa.com/docs/dev/dev-tools-ceres/. Keys and wallet setup
-function get_setup()
-{
-  let s = {
-    "zilliqa": new Zilliqa('http://localhost:5555'),
-    "VERSION": bytes.pack(222, 1),
-    "keys": [
-            // b028055ea3bc78d759d10663da40d171dec992aa
-            'e7f59a4beb997a02a13e0d5e025b39a6f0adc64d37bb1e6a849a4863b4680411',
-            // f6dad9e193fa2959a849b81caf9cb6ecde466771":
-            '589417286a3213dceb37f8f89bd164c3505a4cec9200c61f7c6db13a30a71b45', ],
-  };
-  s.keys.forEach( (item, index, array) => s.zilliqa.wallet.addByPrivateKey(item) );
-  return s;
-}
-
 const setup = () =>
 {
   let s = {
     "zilliqa": new Zilliqa('http://localhost:5555'),
     "VERSION": bytes.pack(222, 1),
-    "keys": [
+    "priv_keys": [
             // b028055ea3bc78d759d10663da40d171dec992aa
             'e7f59a4beb997a02a13e0d5e025b39a6f0adc64d37bb1e6a849a4863b4680411',
             // f6dad9e193fa2959a849b81caf9cb6ecde466771":
             '589417286a3213dceb37f8f89bd164c3505a4cec9200c61f7c6db13a30a71b45', ],
   };
-  s.keys.forEach( (item, index, array) => s.zilliqa.wallet.addByPrivateKey(item) );
+  s["addresses"] = [];
+  s["pub_keys"] = [];
+  s.priv_keys.forEach( item => {
+    s.zilliqa.wallet.addByPrivateKey(item);// add key to wallet
+    s.addresses.push(getAddressFromPrivateKey(item)); // compute and store address
+    s.pub_keys.push(getPubKeyFromPrivateKey(item));
+  });
   return s;
 }
 
@@ -42,7 +33,7 @@ const tx_settings = {
   "attempts": Long.fromNumber(10),
   "timeout": 1000,
 };
-
+exports.setup = setup;
 /* ---------------------------------------------------------------------------------------------------------------------------
 utility functions
 --------------------------------------------------------------------------------------------------------------------------- */
