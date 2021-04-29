@@ -6,9 +6,9 @@ const {
   getPubKeyFromPrivateKey } = require('@zilliqa-js/crypto');
 
 // chain setup on ceres locally run isolated server, see https://dev.zilliqa.com/docs/dev/dev-tools-ceres/. Keys and wallet setup
-const setup = () =>
+const s = () =>
 {
-  let s = {
+  let setup = {
     "zilliqa": new Zilliqa('http://localhost:5555'),
     "VERSION": bytes.pack(222, 1),
     "priv_keys": [
@@ -17,15 +17,17 @@ const setup = () =>
             // f6dad9e193fa2959a849b81caf9cb6ecde466771":
             '589417286a3213dceb37f8f89bd164c3505a4cec9200c61f7c6db13a30a71b45', ],
   };
-  s["addresses"] = [];
-  s["pub_keys"] = [];
-  s.priv_keys.forEach( item => {
-    s.zilliqa.wallet.addByPrivateKey(item);// add key to wallet
-    s.addresses.push(getAddressFromPrivateKey(item)); // compute and store address
-    s.pub_keys.push(getPubKeyFromPrivateKey(item));
+  setup["addresses"] = [];
+  setup["pub_keys"] = [];
+  setup.priv_keys.forEach( item => {
+    setup.zilliqa.wallet.addByPrivateKey(item);// add key to wallet
+    setup.addresses.push(getAddressFromPrivateKey(item)); // compute and store address
+    setup.pub_keys.push(getPubKeyFromPrivateKey(item)); // compute and store public key
   });
-  return s;
+  return setup;
 }
+const setup = s();
+exports.setup = setup;
 
 // will use same tx settings for all tx's
 const tx_settings = {
@@ -34,9 +36,7 @@ const tx_settings = {
   "attempts": Long.fromNumber(10),
   "timeout": 1000,
 };
-exports.setup = setup;
 
-const s = setup();
 /* ---------------------------------------------------------------------------------------------------------------------------
 utility functions
 --------------------------------------------------------------------------------------------------------------------------- */
@@ -53,20 +53,20 @@ function read(f)
 async function deploy_from_file(path, init)
 {
   const code = read(path);
-  const contract = s.zilliqa.contracts.new(code, init);
+  const contract = setup.zilliqa.contracts.new(code, init);
   return contract.deploy(
-    { version: s.VERSION, gasPrice: tx_settings.gas_price, gasLimit: tx_settings.gas_limit, },
+    { version: setup.VERSION, gasPrice: tx_settings.gas_price, gasLimit: tx_settings.gas_limit, },
     tx_settings.attempts, tx_settings.timeoute, false
   );
 }
 
 // call a smart contract's transition with given args and an amount to send from a given public key
-async function sc_call(sc, transition, args = [], amt = new BN(0), caller_pub_key = s.pub_keys[0])
+async function sc_call(sc, transition, args = [], amt = new BN(0), caller_pub_key = setup.pub_keys[0])
 {
   return sc.call(
     transition,
     args,
-    { version: s.VERSION, amount: amt, gasPrice: tx_settings.gas_price,
+    { version: setup.VERSION, amount: amt, gasPrice: tx_settings.gas_price,
       gasLimit: tx_settings.gas_limit, pubKey: caller_pub_key, },
     tx_settings.attempts, tx_settings.timeout, true,
   );

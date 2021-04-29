@@ -16,17 +16,16 @@ async function run()
 
   let tx = sc = null;
   try { // deploy the contract with account[0] the initial owner
-    const s = setup();
     const init = [
       { vname: '_scilla_version',     type: 'Uint32',   value: '0',},
-      { vname: 'owner_at_deployment', type: 'ByStr20',  value: s.addresses[0] },
+      { vname: 'owner_at_deployment', type: 'ByStr20',  value: setup.addresses[0] },
     ];
     [tx, sc] = await deploy_from_file("../contracts/Ownership.scilla", init);
     console.log("contract deployed @ ", sc.address);
     try { // call foo(.) and log emitted events params indicating if caller was the owner
       await call_foo();
       try { // call change_owner to change owner to 2nd address and log state
-        const new_owner = s.addresses[1];
+        const new_owner = setup.addresses[1];
         const args = [ { vname: 'new_owner', type: 'ByStr20',  value: new_owner },];
         tx = await sc_call(sc, "change_owner", args);
         const state = await sc.getState();
