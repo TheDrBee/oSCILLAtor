@@ -34,6 +34,8 @@ const tx_settings = {
   "timeout": 1000,
 };
 exports.setup = setup;
+
+const s = setup();
 /* ---------------------------------------------------------------------------------------------------------------------------
 utility functions
 --------------------------------------------------------------------------------------------------------------------------- */
@@ -47,28 +49,26 @@ function read(f)
 }
 
 // deploy a smart contract whose code is in a file with given init arguments
-async function deploy_from_file(file, init)
+async function deploy_from_file(path, init)
 {
   const code = read(path);
-  const contract = setup.zilliqa.contracts.new(code, init);
-  const [tx, sc] = await contract.deploy(
-    { version: setup.VERSION, gasPrice: tx_settings.gas_price, gasLimit: tx_settings.gas_limit, },
+  const contract = s.zilliqa.contracts.new(code, init);
+  return contract.deploy(
+    { version: s.VERSION, gasPrice: tx_settings.gas_price, gasLimit: tx_settings.gas_limit, },
     tx_settings.attempts, tx_settings.timeoute, false
   );
-  return [tx, sc];
 }
 
 // call a smart contract's transition with given args and an amount to send from a given public key
-async function sc_call(sc, transition, args, amt = new BN(0), caller_pub_key = getPubKeyFromPrivateKey(setup.keys[0]))
+async function sc_call(sc, transition, args = [], amt = new BN(0), caller_pub_key = s.pub_keys[0])
 {
-  const tx = await sc.call(
+  return sc.call(
     transition,
     args,
-    { version: setup.VERSION, amount: amt, gasPrice: tx_settings.gas_price,
+    { version: s.VERSION, amount: amt, gasPrice: tx_settings.gas_price,
       gasLimit: tx_settings.gas_limit, pubKey: caller_pub_key, },
-    tx_settings.attempts, 1000, true,
+    tx_settings.attempts, tx_settings.timeout, true,
   );
-  return tx;
 }
 
 exports.deploy_from_file = deploy_from_file;
