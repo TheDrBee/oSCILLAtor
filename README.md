@@ -15,6 +15,15 @@ How to send a message to another smart contract and get a result back:
 
 Script: [Callback.js](./js/Callback.js). 
 
+## Funds
+How to send/receive funds (native ZIL in units of QA with 1 ZIL = 10^12 QA) to/from a smart contract:
+[The Funds](./contracts/Funds.scilla) has transitions to
+- send funds to it: `deposit()`
+- withdraw an amount of funds from it: `withdraw(amount: Uint128)`
+- withdraw all funds ("empty it"): `empty()`.
+
+Script: [Funds.js](./js/Funds.js).
+
 ## List
 The [List smart contract](./contracts/List.scilla) shows list manipulations and use cases of the library `ListUtils`
 - construct a list using `Nil` and `Cons`
