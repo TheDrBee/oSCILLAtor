@@ -17,7 +17,7 @@ async function run()
       console.log(`state after call to set(${val}):`, state);
       try { // call emit() and log event emitted
         tx = await sc_call(sc, "emit");
-        console.log(`event_logs[0] after call to emit():`, tx.receipt.event_logs[0]);
+        console.log(`event_logs[0] after call to emit():\n`, tx.receipt.event_logs[0]);
       } catch (err) {
         console.log("emit(): ERROR\n",err);
       }

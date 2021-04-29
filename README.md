@@ -1,6 +1,10 @@
 # scilla examples
 
-Exampes and Snippets of the [scilla programming language](https://scilla.readthedocs.io/en/latest/) 
+Exampes and Snippets of the [scilla programming language](https://scilla.readthedocs.io/en/latest/).
+
+Contracts are all in folder `contracts/`. 
+
+Scripts using the [Zilliqa JS lib](https://github.com/Zilliqa/Zilliqa-JavaScript-Library) that deploy the contracts and interact with them through their transitions are in folder `js/`.
 
 ## Callback
 How to send a message to another smart contract and get a result back:
@@ -17,7 +21,8 @@ The [List smart contract](./contracts/List.scilla) shows list manipulations and 
 
 ## Ownership
 The [Ownership smart contract](./contracts/Ownership.scilla) shows how a smart contract can have an owner, and how to check if the caller of a transition (the `_sender` of the transaction) is the owner.
+Run [Ownership.js](./js/Ownership.js) using `node Ownership.js`.
 
 ## SetGet
-Simple [SetGet smart contract](./contracts/SetGet.scilla) showing how to modify a state variable through a transition, and how to emit the value of a state variable in an event.
-
+The [SetGet smart contract](./contracts/SetGet.scilla) shows how to modify a state variable through a transition, and how to emit the value of a state variable in an event.
+Run [SetGet.js](./js/SetGet.js) using `node SetGet.js`.
