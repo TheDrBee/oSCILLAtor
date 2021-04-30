@@ -6,6 +6,20 @@ Contracts are all in folder `contracts/`.
 
 Scripts using the [Zilliqa JS lib](https://github.com/Zilliqa/Zilliqa-JavaScript-Library) that deploy the contracts and interact with them through their transitions are in folder `js/`. They are run in that directory using: `node <ScriptName.js>`.
 
+## AdtMap
+How to create a map storing user defined algebraic data types (ADTs):
+The [AdtMap smart contract](./contracts/AdtMap.scilla) defines an ADT `Player` which consists of the age and a sport, either Tennis or Run. It has transitions to
+- add a Tennis player of a certain age
+- add a Runner of a certain age
+- change the age of a previously added player (leaving the Sport unchanged)
+- remove a previously added player.
+
+Players are indexed by the caller's address (`_sender`).
+
+Note that adding a Player more than once from the same account overwrites a previous entry of this account's address (uniqueness).
+
+Script: [AdtMap.js](./js/AdtMap.js).
+
 ## Callback
 How to send a message to another smart contract and get a result back:
 The [Caller smart contract](./contracts/Caller.scilla) calls The [Callee smart contract](./contracts/Callee.scilla) to retrieve a value:
