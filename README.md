@@ -32,8 +32,8 @@ Script: [AdtMap.js](./js/AdtMap.js).
 ### Callback
 How to send a message to another smart contract and get a result back:
 The [Caller smart contract](./contracts/Caller.scilla) calls The [Callee smart contract](./contracts/Callee.scilla) to retrieve a value:
-1) caller sends msg to callee's transition `get_value` in its transition `call_for_value()`.
-2) callee sends msg to caller's callback: transition `value_callback(v : Uint128)` with `v` the value stored in its `field value`.
+1) caller sends msg to callee's transition `GetValue` in its transition `CallForValue()`.
+2) callee sends msg to caller's callback: transition `ValueCallback(v : Uint128)` with `v` the value stored in its `field value`.
 3) the caller receive the value, stores it in its `field value` and emits an event.
 
 Script: [Callback.js](./js/Callback.js).
@@ -41,16 +41,16 @@ Script: [Callback.js](./js/Callback.js).
 ### Funds
 How to send/receive funds (native ZIL in units of QA with 1 ZIL = 10^12 QA) to/from a smart contract:
 The [Funds smart contract](./contracts/Funds.scilla) offers transitions to
-- send funds to it: `deposit()`
-- withdraw an amount of funds from it: `withdraw(amount: Uint128)`
-- withdraw all funds ("empty it"): `empty()`.
+- send funds to it: `Deposit()`
+- withdraw an amount of funds from it: `Withdraw(amount: Uint128)`
+- withdraw all funds ("empty it"): `Empty()`.
 
 Script: [Funds.js](./js/Funds.js).
 
 ### List
 The [List smart contract](./contracts/List.scilla) shows list manipulations and use cases of the library `ListUtils`
-- construct a list using `Nil` and `Cons`
-- remove elments from a list that equal a value, showing the application of a predicate and a curried function
+- construct a list using `Nil` and `Cons`: `Create123()`
+- remove elments from a list that equal a value, showing the application of a predicate and a curried function: `RemoveIfEqualTo(value: Uint32)`.
 
 Script: [List.js](./js/List.js).
 
