@@ -31,38 +31,38 @@ procedure TransferTo(to : ByStr20, amount : Uint128)
   send msgs
 end
 
-transition deposit() (* send QA to contract to receive and store it in contract *)
+transition Deposit() (* send QA to contract to receive and store it in contract *)
   received = is_positive _amount;
   match received with
   |True  =>
     accept;
     b <- _balance;
-    ev = {_eventname: "deposit()"; amount_received: _amount; new_balance: b};
+    ev = {_eventname: "DepositSuccess"; amount_received: _amount; new_balance: b};
     event ev
   |False =>
   end
 end
 
-transition withdraw(amount : Uint128) (* withdraw an amount from the contract *)
+transition Withdraw(amount : Uint128) (* withdraw an amount from the contract *)
   b <- _balance;
   is_more_than_balance = uint128_gt amount b;
   match is_more_than_balance with
   |True => (* requested more than the balance, do not fullfil request *)
-    ev = {_eventname: "withdraw() - not successful"; amount_requested: amount; new_balance: b};
+    ev = {_eventname: "WithdrawFailue"; amount_requested: amount; new_balance: b};
     event ev
   |False =>
     new_b = builtin sub b amount;
     TransferTo _sender amount;
-    ev = {_eventname: "withdraw()"; amount_withdrawn: amount; new_balance: new_b};
+    ev = {_eventname: "WithdrawSuccess"; amount_withdrawn: amount; new_balance: new_b};
     event ev
   end
 end
 
-transition empty() (* withdraw everything *)
+transition Empty() (* withdraw everything *)
   b <- _balance;
   zero = Uint128 0;
   TransferTo _sender b;
   new_b <- _balance;
-  ev = {_eventname: "empty()"; amount_withdrawn: b; new_balance: new_b};
+  ev = {_eventname: "EmptySuccess"; amount_withdrawn: b; new_balance: new_b};
   event ev
 end

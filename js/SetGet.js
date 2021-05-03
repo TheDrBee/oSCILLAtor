@@ -12,17 +12,17 @@ async function run()
     try { // call set(.) and log state
       const val = 16;
       const args = [ { vname: 'v', type: 'Uint128',  value: val.toString() },];
-      tx = await sc_call(sc, "set", args);
+      tx = await sc_call(sc, "Set", args);
       const state = await sc.getState();
-      console.log(`state after call to set(${val}):`, state);
+      console.log(`state after call to Set(${val}):`, state);
       try { // call emit() and log event emitted
-        tx = await sc_call(sc, "emit");
-        console.log(`event_logs[0] after call to emit():\n`, tx.receipt.event_logs[0]);
+        tx = await sc_call(sc, "Emit");
+        console.log(`event_logs[0] after call to Emit():\n`, tx.receipt.event_logs[0]);
       } catch (err) {
-        console.log("emit(): ERROR\n",err);
+        console.log("Emit(): ERROR\n",err);
       }
     } catch (err) {
-      console.log("set(.): ERROR\n",err);
+      console.log("Set(.): ERROR\n",err);
     }
   } catch (err) {
     console.log("deploy_from_file(.): ERROR\n",err);

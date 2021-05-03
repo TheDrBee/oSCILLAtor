@@ -15,18 +15,18 @@ async function run()
     try { // call set_value(.) on callee
       const val = 337;
       const args = [{ vname: 'new_value', type: 'Uint128', value: val.toString() }];
-      tx = await sc_call(sc_callee, "set_value", args);
+      tx = await sc_call(sc_callee, "SetValue", args);
       state = await sc_callee.getState();
-      console.log(`state of Callee after call to set_value(${val}):`, state);
+      console.log(`state of Callee after call to SetValue(${val}):`, state);
       try { // cal call_for_value() on Caller and log state
-        tx = await sc_call(sc_caller, "call_for_value", []);
+        tx = await sc_call(sc_caller, "CallForValue", []);
         state = await sc_caller.getState();
-        console.log(`state of Caller after call to call_for_value(.):\n`, state);
+        console.log(`state of Caller after call to CallForValue(.):\n`, state);
       } catch (err) {
-        console.log("call_for_value(.): ERROR\n",err)
+        console.log("CallForValue(.): ERROR\n",err)
       }
     } catch (err) {
-      console.log("set_value(): ERROR\n",err);
+      console.log("SetValue(): ERROR\n",err);
     }
   } catch (err) {
     console.log("deploy_from_file(.): ERROR\n",err);

@@ -27,13 +27,13 @@ contract List()
 field list : List Uint32 = empty_list
 
 (* create a list [1,2,3] and store in field list *)
-transition create123()
+transition Create123()
   l = list123;
   list := l
 end
 
 (* remove elements from list that equal to value *)
-transition remove_if_equal_to(value: Uint32)
+transition RemoveIfEqualtTo(value: Uint32)
   f = not_equal value;
   filterUint32 = @list_filter Uint32;
   l <- list;

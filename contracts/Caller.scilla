@@ -1,7 +1,7 @@
 scilla_version 0
 (***************************************************)
-(* call transition get_value() of another contract *)
-(* "Callee" and get called back in value_callback()*)
+(* call transition GetValue() of another contract *)
+(* "Callee" and get called back in ValueCallback()*)
 (***************************************************)
 library Caller
 let zero = Uint128 0
@@ -19,15 +19,15 @@ field callee: ByStr20 = init_callee
 field value: Uint128 = Uint128 0
 
 (* calls the callee and ask to call back with value *)
-transition call_for_value()
+transition CallForValue()
   to <- callee;
-  msg = {_tag : "get_value"; _recipient : to; _amount : zero};
+  msg = {_tag : "GetValue"; _recipient : to; _amount : zero};
   msgs = one_msg msg;
   send msgs
 end
 (* callback called by callee with value v *)
-transition value_callback(v : Uint128)
+transition ValueCallback(v : Uint128)
   value := v;
-  e = {_eventname : "value_callback()"; new_value : v};
+  e = {_eventname : "ValueCallbackSuccess"; new_value : v};
   event e
 end

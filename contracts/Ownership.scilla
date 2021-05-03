@@ -9,17 +9,17 @@ contract Ownership
 field owner : ByStr20 = owner_at_deployment (* the current owner *)
 
 (* emit an event showing both the sender and the owner, and a bool if they equal *)
-transition foo()
+transition Foo()
   o <- owner;
   is_owner = builtin eq _sender o;
-  ev = {_eventname: "foo"; sender: _sender; owner: o; called_by_owner: is_owner};
+  ev = {_eventname: "Foo"; sender: _sender; owner: o; called_by_owner: is_owner};
   event ev
 end
 
 (* change ownership: everyone can do this, not just the actual owner *)
-transition change_owner(new_owner : ByStr20)
+transition ChangeOwner(new_owner : ByStr20)
   old <- owner;
   owner := new_owner;
-  ev = {_eventname: "change_owner"; sender: _sender; old_owner: old; new_owner: new_owner};
+  ev = {_eventname: "ChangeOwner"; sender: _sender; old_owner: old; new_owner: new_owner};
   event ev
 end

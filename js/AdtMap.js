@@ -15,7 +15,7 @@ async function run()
 
   async function add(age, is_tennis, acc_index)
   {
-    const transition = is_tennis ? "add_tennis" : "add_run";
+    const transition = is_tennis ? "AddTennis" : "AddRun";
     const args = [ { vname: 'age', type: 'Uint32',  value: age.toString() },];
     console.log("add " + setup.addresses[acc_index]
       + ": age = " + age + ", sport = " + (is_tennis ? "Tennis" : "Run"))
@@ -40,17 +40,17 @@ async function run()
           try { // overwrite the account 1 to tennis player of age 35
             await add(35, true, 1);
             try { // remove the player from account 0 from the map
-              console.log("remove " + setup.addresses[0]);
-              tx = await sc_call(sc, 'remove');
+              console.log("Remove " + setup.addresses[0]);
+              tx = await sc_call(sc, 'Remove');
               await log_players();
             } catch (err) {
-              console.log("remove(): ERROR\n",err)
+              console.log("Remove(): ERROR\n",err)
             }
           } catch (err) {
             console.log("add(.): ERROR\n",err)
           }
         } catch (err) {
-          console.log("change_age(.): ERROR\n",err)
+          console.log("ChangeAge(.): ERROR\n",err)
         }
       } catch (err) {
         console.log("add(.): ERROR\n",err);
