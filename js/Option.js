@@ -1,6 +1,5 @@
 /* deploy the Option contract, set/remove its value, interact  */
 const {
-  setup,
   deploy_from_file,
   sc_call } = require("./blockchain.js");
 
