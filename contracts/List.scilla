@@ -1,9 +1,7 @@
 scilla_version 0
-
 (***************************************************)
 (* List operations                                 *)
 (***************************************************)
-
 import ListUtils BoolUtils
 
 library List
