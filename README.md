@@ -54,6 +54,15 @@ The [List smart contract](./contracts/List.scilla) shows list manipulations and 
 
 Script: [List.js](./js/List.js).
 
+### Option Type
+The [Option smart contract](./contracts/Option.scilla) shows how to
+- create the empty option type using `None` constructor
+- create an optional Uint32 value using `Some` constructor
+- extract the value from the option
+- do different things depending on whether the value in the option is set or not.
+
+Script: [Option.js](./js/Option.js).
+
 ### Ownership
 The [Ownership smart contract](./contracts/Ownership.scilla) shows how a smart contract can have an owner, and how to check if the caller of a transition (the `_sender` of the transaction) is the owner.
 
