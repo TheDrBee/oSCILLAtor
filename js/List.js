@@ -12,15 +12,22 @@ async function run_remove()
     console.log(`list in state after call to remove ${val}:`, l);
   }
 
-  let tx = sc = null;
+  let tx = sc = state = null;
   try { // deploy the contract
     const init = [ { vname: '_scilla_version', type: 'Uint32', value: '0',}, ];
     [tx, sc] = await deploy_from_file("../contracts/List.scilla", init);
     console.log("contract deployed @ ", sc.address);
     try { // call create123(.) and log state
       tx = await sc_call(sc, "Create123");
-      const state = await sc.getState();
+      state = await sc.getState();
       console.log(`state after call to Create123():`, state);
+      try { // compute 2*list[i] and store in a Map as map[l_i] = 2*l_i, l_i = list[i]
+        tx = await sc_call(sc, "ComputeDoubles");
+        state = await sc.getSubState('doubles');
+        console.log(`doubles in state after call to compute twice the values`, state);
+      } catch (err) {
+        console.log("ComputeDoubles(.): ERROR\n", err);
+      }
       try { // remove element with value 2, (non existing) value 0, value 1, value 3
         await remove(2);
         await remove(0);

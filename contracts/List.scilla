@@ -37,6 +37,7 @@ let not_equal = fun (a: Uint32) => fun(b: Uint32) =>
 contract List()
 
 field list : List Uint32 = empty_list
+field doubles : Map Uint32 Uint32 = Emp Uint32 Uint32 (* doubles[l[i]]=2*l[i] *)
 
 (* create a list [1,2,3] and store in field list *)
 transition Create123()
@@ -61,4 +62,16 @@ transition Compare123To321()
   r = list_zip_eq_with equal l123 l321;
   ev = {_eventname : "Compare123To321"; result : r};
   event ev
+end
+
+(* compute 2*l[i] and store in doubles[l[i]] *)
+procedure Twice(v: Uint32)
+  res =
+    let two = Uint32 2 in (* res = 2 * v *)
+    builtin mul v two;
+  doubles[v] := res (* store in map *)
+end
+transition ComputeDoubles()
+  l <- list;
+  forall l Twice (* apply Twice(.) to each element *)
 end
