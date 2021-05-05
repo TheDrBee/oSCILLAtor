@@ -8,13 +8,27 @@ library List
 
 let empty_list = Nil {Uint32}
 
+let one   = Uint32 1 (* numbers 1, 2 and 3 to use below *)
+let two   = Uint32 2
+let three = Uint32 3
+
+let create_3el_list = (* utility to create a list with 3 elements *)
+  fun (e1 : Uint32) =>
+  fun (e2 : Uint32) =>
+  fun (e3 : Uint32) =>
+  let nil = empty_list in
+      let le3 = Cons {Uint32} e3 empty_list in (* insert in front *)
+      let le2e3 = Cons {Uint32} e2 le3 in
+      Cons {Uint32} e1 le2e3 (* [e1, e2, e3] *)
+
 let list123 =
   let one   = Uint32 1 in
   let two   = Uint32 2 in
   let three = Uint32 3 in
-  let l3 = Cons {Uint32} three empty_list in (* insert in front *)
-  let l23 = Cons {Uint32} two l3 in
-  Cons {Uint32} one l23
+  create_3el_list one two three
+
+let equal = fun (a: Uint32) => fun(b: Uint32) =>
+  builtin eq a b
 
 let not_equal = fun (a: Uint32) => fun(b: Uint32) =>
   let equal = builtin eq a b in
@@ -26,15 +40,25 @@ field list : List Uint32 = empty_list
 
 (* create a list [1,2,3] and store in field list *)
 transition Create123()
-  l = list123;
+  l = create_3el_list one two three;
   list := l
 end
 
 (* remove elements from list that equal to value *)
 transition RemoveIfEqualtTo(value: Uint32)
   f = not_equal value;
-  filterUint32 = @list_filter Uint32;
+  filterUint32 = @list_filter Uint32; (* from ListUtils *)
   l <- list;
   list_without_values = filterUint32 f l;
   list := list_without_values
+end
+
+(* compare the lists [1,2,3] and [3 2 1] *)
+transition Compare123To321()
+  l123 = create_3el_list one two three; (* [1, 2, 3] *)
+  l321 = create_3el_list three two one; (* [3, 2, 1] *)
+  list_zip_eq_with = @list_zip_with Uint32 Uint32 Bool; (* from ListUtils *)
+  r = list_zip_eq_with equal l123 l321;
+  ev = {_eventname : "Compare123To321"; result : r};
+  event ev
 end

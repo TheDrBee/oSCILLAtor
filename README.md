@@ -49,9 +49,10 @@ The [Funds smart contract](./contracts/Funds.scilla) offers transitions to
 Script: [Funds.js](./js/Funds.js).
 
 ### List
-The [List smart contract](./contracts/List.scilla) shows list manipulations and use cases of the library `ListUtils`
+The [List smart contract](./contracts/List.scilla) shows list manipulations and use cases of the library `ListUtils`. It shows application of predicates and curried functions:
 - construct a list using `Nil` and `Cons`: `Create123()`
-- remove elments from a list that equal a value, showing the application of a predicate and a curried function: `RemoveIfEqualTo(value: Uint32)`.
+- remove elments from a list that equal a value applying `list_filter`, see `RemoveIfEqualTo(value: Uint32)`
+- compare two lists and create a list of booleans applying `list_zip_with`, see `Compare123To321()`
 
 Script: [List.js](./js/List.js).
 

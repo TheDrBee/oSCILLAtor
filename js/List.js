@@ -29,6 +29,13 @@ async function run_remove()
       } catch (err) {
         console.log("RemoveIfEqualtTo(.): ERROR\n",err);
       }
+      try { // compare [1,2,3] to [3,2,1] --> [False, True, False]
+        console.log("calling Compare123To321()...")
+        tx = await sc_call(sc, "Compare123To321");
+        console.log(` stringified event's params:\n`, JSON.stringify(tx.receipt.event_logs[0].params));
+      } catch (err) {
+        console.log("Compare123To321(): ERROR\n", err);
+      }
     } catch (err) {
       console.log("Create123(): ERROR\n",err);
     }
