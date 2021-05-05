@@ -1,7 +1,7 @@
 scilla_version 0
 (************************************************************************)
 (* Scilla's Option type: a type that either is "empty" ("None") or has  *)
-(* a Uint32 ("Some {Uint}")                                             *)
+(* a Uint32 ("Some {Uint32}")                                           *)
 (* How to i) create (with and without value), (ii) to extract the value *)
 (* and iii) do different things depending if the Option is empty or not *)
 (************************************************************************)
