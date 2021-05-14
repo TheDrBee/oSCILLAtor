@@ -21,12 +21,6 @@ let create_3el_list = (* utility to create a list with 3 elements *)
       let le2e3 = Cons {Uint32} e2 le3 in
       Cons {Uint32} e1 le2e3 (* [e1, e2, e3] *)
 
-let list123 =
-  let one   = Uint32 1 in
-  let two   = Uint32 2 in
-  let three = Uint32 3 in
-  create_3el_list one two three
-
 let equal = fun (a: Uint32) => fun(b: Uint32) =>
   builtin eq a b
 
@@ -41,7 +35,7 @@ field doubles : Map Uint32 Uint32 = Emp Uint32 Uint32 (* doubles[l[i]]=2*l[i] *)
 
 (* create a list [1,2,3] and store in field list *)
 transition Create123()
-  l = create_3el_list one two three;
+  l = create_3el_list one two three; (* [1, 2, 3] *)
   list := l
 end
 
