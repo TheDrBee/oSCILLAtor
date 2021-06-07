@@ -48,6 +48,11 @@ The [Funds smart contract](./contracts/Funds.scilla) offers transitions to
 
 Script: [Funds.js](./js/Funds.js).
 
+### Integers
+The [Integer smart contract](./contracts/Integers.scilla) shows operations on integer types:
+- how to compare using [IntUtils library](https://scilla.readthedocs.io/en/latest/scilla-in-depth.html#intutils)
+
+
 ### List
 The [List smart contract](./contracts/List.scilla) shows list manipulations and use cases of the library `ListUtils`. It shows application of predicates and curried functions:
 - construct a list using `Nil` and `Cons`: `Create123()`

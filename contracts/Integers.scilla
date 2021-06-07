@@ -1,0 +1,14 @@
+scilla_version 0
+(******************************************************)
+(* basic operations with integer types using IntUtils *)
+(******************************************************)
+
+import IntUtils
+
+contract Integers()
+
+transition IsGreaterThan(a: Int32, b: Int32)
+  is_gt = int32_gt a b;
+  ev = {_eventname : "IsGreaterThan"; a: a; b: b; is_a_greater_b: is_gt};
+  event ev
+end
