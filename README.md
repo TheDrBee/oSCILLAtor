@@ -60,6 +60,8 @@ The [List smart contract](./contracts/List.scilla) shows list manipulations and 
 - compare two lists and create a list of booleans applying `list_zip_with`, see `Compare123To321()`
 - apply a procedure to compute twice the value of each element and store the result in a map (m[l_i] = 2*l_i) applying `forall`, see `ComputeDoubles()`
 
+See also [Recursion smart contract](./contracts/Recursion.scilla) on how to build a list [m, m+1, ..., n-1] for parameters `m` and `n`.
+
 Script: [List.js](./js/List.js).
 
 ### Option Type
@@ -75,6 +77,11 @@ Script: [Option.js](./js/Option.js).
 The [Ownership smart contract](./contracts/Ownership.scilla) shows how a smart contract can have an owner, and how to check if the caller of a transition (the `_sender` of the transaction) is the owner.
 
 Script: [Ownership.js](./js/Ownership.js).
+
+### Recursion
+The [Recursion smart contract](./contracts/Recursion.scilla) shows how to use recursion in Scilla. 
+- create a list [m, m+1, ..., n-1] where `m` and `n` are inputs, see `transition CreateList(m : Uint32, n : Uint32)`
+
 
 ### SetGet
 The [SetGet smart contract](./contracts/SetGet.scilla) shows how to modify a state variable through a transition, and how to emit the value of a state variable in an event.

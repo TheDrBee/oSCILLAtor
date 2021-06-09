@@ -1,0 +1,44 @@
+(* Adapted version of an example by Amrit that uses
+   recursion to build a list [m, m+1, ..., n-2, n-1] where
+   m and n are parameters *)
+scilla_version 0
+
+library Recursion
+
+let empty_list = Nil {Uint32}
+
+let build_list : Uint32 -> Uint32 -> List Uint32 =
+  fun (m : Uint32) =>
+  fun (n : Uint32) =>
+    let m_lt_n = builtin lt m n in (* if m >= n the list is empty *)
+    match m_lt_n with
+    | True =>
+        let delta = builtin sub n m in
+        let delta_nat = builtin to_nat delta in
+        let acc_init = Pair {(List Uint32) Uint32} empty_list n in
+        let one = Uint32 1 in
+        let step =
+          fun (xs_n : Pair (List Uint32) Uint32) =>
+          fun (ignore : Nat) =>
+          match xs_n with
+          | Pair xs n =>
+              let new_n = builtin sub n one in
+              let new_xs = Cons {Uint32} new_n xs in
+              Pair {(List Uint32) Uint32} new_xs new_n
+          end in
+        let fold = @nat_fold (Pair (List Uint32) Uint32) in
+        let xs_m = fold step acc_init delta_nat in
+        match xs_m with
+        | Pair xs m => xs
+        end
+    | False => empty_list
+    end
+
+contract Recursion()
+
+(* create the list [m, m+1, ..., n-1] *)
+transition CreateList(m : Uint32, n : Uint32)
+ l = build_list m n;
+ e = {_eventname : "CreateList"; list : l};
+ event e
+end
