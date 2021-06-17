@@ -54,8 +54,19 @@ transition Compare123To321()
   l321 = create_3el_list three two one; (* [3, 2, 1] *)
   list_zip_eq_with = @list_zip_with Uint32 Uint32 Bool; (* from ListUtils *)
   r = list_zip_eq_with equal l123 l321;
-  ev = {_eventname : "Compare123To321"; result : r};
+  ev = {_eventname : "Compare123To321"; result: r};
   event ev
+end
+
+(* compute the element wise difference of 2 lists *)
+transition Difference321Minus111()
+    l321 = create_3el_list three two one; (* [3, 2, 1] *)
+    l111 = create_3el_list one one one; (* [1, 1, 1] *)
+    list_zip_diff = @list_zip_with Uint32 Uint32 Uint32; (* from ListUtils *)
+    r = let diff = fun (a: Uint32) => fun(b: Uint32) => builtin sub a b in (* diff = a - b *)
+      list_zip_diff diff l321 l111;
+    ev = {_eventname: "Difference321Minus111"; result: r};
+    event ev
 end
 
 (* compute 2*l[i] and store in doubles[l[i]] *)
