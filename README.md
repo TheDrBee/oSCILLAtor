@@ -15,6 +15,15 @@ In order to run the JS scripts install [ceres](https://github.com/Zilliqa/ceres/
 
 ## Examples
 
+### Adt
+How to define and use (user defined) algebraic data types (ADTs)
+The [Adt smart contract](./contracts/Adt.scilla) defines and ADT `Item` which can be a shirt or a barbell. An Item has a weight (a `Uint32`). Then, an
+ADT `Parcel` is defined that consists of either one or two Items. The Items must not necessarily be of the same type, so a Parcel can contain a shirt and a barbell, for example. 
+Depending on the (total) weight of the contents of a Parcel (the weight of the item(s) it contains) the shipping cost is computed. Finally, the Parcel is stored 
+together with its shipping cost in a list. 
+
+This also shows application of the builtin ADT [Pair](https://scilla.readthedocs.io/en/latest/scilla-in-depth.html#pair): The list entries are `Pair {Parcel Uint32}`, i.e., pairs (parcel, shipping cost).
+
 
 ### AdtMap
 How to create a map storing user defined algebraic data types (ADTs):

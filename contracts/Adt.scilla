@@ -1,0 +1,83 @@
+scilla_version 0
+(****************************************************************************)
+(* user defined algebraic data type (ADT) examples:                         *)
+(*   a Parcel with a content consisting of one or two Item(s)               *)
+(*   A single Item can be a Shirt or a Barbell and has a weight             *)
+(*   A Parcel can have one Item or two Items in it and depending on the     *)
+(*   total weight has a cost to ship assigned to it                         *)
+(****************************************************************************)
+library Adt
+
+type Item = (* constructor argument is the weight of the item *)
+  | Shirt of Uint32
+  | Barbell of Uint32
+
+type Parcel =
+  | OneContent of Item (* a parcel with a single item as content *)
+  | TwoContents of Item Item (* a parcel can be filled with 2 items *)
+
+let weight_of_item = fun(i: Item) => (* how much an item weighs *)
+  match i with
+  | Shirt w => w
+  | Barbell w => w
+  end
+
+let cost_per_weight = Uint32 5
+
+let cost_of_parcel = fun(p: Parcel) => (* cost to ship the parcel *)
+  let weight =
+    match p with
+    | OneContent c => (* parcel has only one item as content *)
+        weight_of_item c
+    | TwoContents c1 c2 => (* parcel has two items as content *)
+        let w1 = weight_of_item c1 in
+        let w2 = weight_of_item c2 in
+        builtin add w1 w2 (* total weight is sum of the two *)
+    end in
+  builtin mul weight cost_per_weight (* cost is total weight times cost_per_weight *)
+
+
+contract Adt
+()
+
+(* mutable fields declarations *)
+field parcels : List (Pair Parcel Uint32) = Nil {(Pair Parcel Uint32)} (* a list of parcels and their cost to ship *)
+
+procedure ComputeCostAndAdd(p: Parcel)
+  (* compute cost to ship the new parcel *)
+  cost = cost_of_parcel p;
+  (* add it to the list of parcels *)
+  l <- parcels;
+  pair = Pair {Parcel Uint32} p cost;
+  new_list = Cons {(Pair Parcel Uint32)} pair l; (* front insert *)
+  parcels := new_list;
+  ev = {_eventname : "AddToListOfParcelsSuccess"; cost_to_ship: cost; parcels: new_list};
+  event ev
+end
+
+(* add parcels with different items to the list of parcels *)
+transition AddParcelWithShirt(weight: Uint32)
+  c = Shirt weight;
+  p = OneContent c;
+  ComputeCostAndAdd p
+end
+
+transition AddParcelWithBarbell(weight: Uint32)
+  c = Barbell weight;
+  p = OneContent c;
+  ComputeCostAndAdd p
+end
+
+transition AddParcelWithTwoShirts(weight1: Uint32, weight2: Uint32)
+  c1 = Shirt weight1;
+  c2 = Shirt weight2;
+  p = TwoContents c1 c2;
+  ComputeCostAndAdd p
+end
+
+transition AddParcelWithShirtAndBarbell(weightS: Uint32, weightB: Uint32)
+  c1 = Shirt weightS;
+  c2 = Barbell weightB;
+  p = TwoContents c1 c2;
+  ComputeCostAndAdd p
+end
