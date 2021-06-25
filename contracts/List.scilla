@@ -39,6 +39,22 @@ transition Create123()
   list := l
 end
 
+(* access n-th element of a list using list_nth, and emit it *)
+transition ElementAtPosition(n: Uint32)
+  l <- list;
+  el_opt =
+    let nth = @list_nth Uint32 in (* from ListUtils *)
+    nth n l; (* note that indexing starts at 0 *)
+  match el_opt with (* Option is None if no element with index i in list *)
+  | None => (* index is out of bounds: no such element *)
+    ev = {_eventname: "ElementAtPositionFailure"};
+    event ev
+  | Some el => (* list[i] = el *)
+    ev = {_eventname: "ElementAtPositionSuccess"; index: n; element: el};
+    event ev
+  end
+end
+
 (* remove elements from list that equal to value *)
 transition RemoveIfEqualtTo(value: Uint32)
   f = not_equal value;

@@ -56,6 +56,7 @@ The [Integer smart contract](./contracts/Integers.scilla) shows operations on in
 ### List
 The [List smart contract](./contracts/List.scilla) shows list manipulations and use cases of the library `ListUtils`. It shows application of predicates and curried functions:
 - construct a list using `Nil` and `Cons`: `Create123()`
+- get element at position `n` of a list using `list_nth`(0-based indexing): `ElementAtPosition(n: Uint32)`
 - remove elments from a list that equal a value applying `list_filter`, see `RemoveIfEqualTo(value: Uint32)`
 - compare two lists and create a list of booleans applying `list_zip_with`, see `Compare123To321()`
 - apply a procedure to compute twice the value of each element and store the result in a map (m[l_i] = 2*l_i) applying `forall`, see `ComputeDoubles()`
