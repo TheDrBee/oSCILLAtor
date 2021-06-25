@@ -70,6 +70,7 @@ The [List smart contract](./contracts/List.scilla) shows list manipulations and 
 - compute element wise difference between two lists (r[i] = l1[i] - l2[i] ) applying `list_zip_with`, see `Difference321Minus111()`
 - compare two lists and create a list of booleans applying `list_zip_with`, see `Compare123To321()`
 - apply a procedure to compute twice the value of each element and store the result in a map (m[l_i] = 2*l_i) applying `forall`, see `ComputeDoubles()`
+- compute the sum of all elements in a list applying a left fold (`list_foldl`), see `SumElements112()`
 
 See also [Recursion smart contract](./contracts/Recursion.scilla) on how to build a list [m, m+1, ..., n-1] for parameters `m` and `n`.
 
