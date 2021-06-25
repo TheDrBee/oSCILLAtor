@@ -15,6 +15,15 @@ In order to run the JS scripts install [ceres](https://github.com/Zilliqa/ceres/
 
 ## Examples
 
+### Adt
+How to define and use (user defined) algebraic data types (ADTs)
+The [Adt smart contract](./contracts/Adt.scilla) defines and ADT `Item` which can be a shirt or a barbell. An Item has a weight (a `Uint32`). Then, an
+ADT `Parcel` is defined that consists of either one or two Items. The Items must not necessarily be of the same type, so a Parcel can contain a shirt and a barbell, for example. 
+Depending on the (total) weight of the contents of a Parcel (the weight of the item(s) it contains) the shipping cost is computed. Finally, the Parcel is stored 
+together with its shipping cost in a list. 
+
+This also shows application of the builtin ADT [Pair](https://scilla.readthedocs.io/en/latest/scilla-in-depth.html#pair): The list entries are `Pair {Parcel Uint32}`, i.e., pairs (parcel, shipping cost).
+
 
 ### AdtMap
 How to create a map storing user defined algebraic data types (ADTs):
@@ -58,6 +67,7 @@ The [List smart contract](./contracts/List.scilla) shows list manipulations and 
 - construct a list using `Nil` and `Cons`: `Create123()`
 - get element at position `n` of a list using `list_nth`(0-based indexing): `ElementAtPosition(n: Uint32)`
 - remove elments from a list that equal a value applying `list_filter`, see `RemoveIfEqualTo(value: Uint32)`
+- compute element wise difference between two lists (r[i] = l1[i] - l2[i] ) applying `list_zip_with`, see `Difference321Minus111()`
 - compare two lists and create a list of booleans applying `list_zip_with`, see `Compare123To321()`
 - apply a procedure to compute twice the value of each element and store the result in a map (m[l_i] = 2*l_i) applying `forall`, see `ComputeDoubles()`
 
