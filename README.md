@@ -58,12 +58,12 @@ The [Funds smart contract](./contracts/Funds.scilla) offers transitions to
 Script: [Funds.js](./js/Funds.js).
 
 ### InitParams
-How to initialize a field at deployment with and init parameter given at deployment. 
+How to initialize a field at deployment with an init parameter given at deployment. 
 The [InitParams smart contract](./contracts/InitParams.scilla) shows 
 - how to initialize a list not to an empty list (`nil`) but to a list `[element, 1, 2]` where `element` is an init parameter
 - how to check init parameters using `with .... =>` by checking if the given `element` is smaller then 10. If not, the deployment fails.
 
-Script: [InitParams](./js/InitParams.js)
+Script: [InitParams](./js/InitParams.js).
 
 
 ### Integers
