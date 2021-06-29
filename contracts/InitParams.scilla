@@ -1,0 +1,20 @@
+(* show how to initialize fields with an init parameter *)
+(* given at deployment. Also show how to check initial  *)
+(* paramters                                            *)
+scilla_version 0
+
+import IntUtils
+
+contract InitiParams(element: Uint32)
+with (* check element < 10 *)
+  let ten = Uint32 10 in
+  uint32_lt element ten
+=>
+
+field list : List Uint32 = (* initialize to [element, 1, 2] *)
+  let one = Uint32 1 in
+  let two = Uint32 2 in
+  let nil = Nil {Uint32} in (* empty list: nil = [] *)
+  let l2 = Cons {Uint32} two nil in (* l2 = [nil, 2] = [2] *)
+  let l12 = Cons {Uint32} one l2 in (* l12 = [1, l2] = [1, 2] *)
+  Cons {Uint32} element l12 (* [el, l12] = [element, 1, 2] *)
