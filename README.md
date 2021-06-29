@@ -81,7 +81,9 @@ The [List smart contract](./contracts/List.scilla) shows list manipulations and 
 - apply a procedure to compute twice the value of each element and store the result in a map (m[l_i] = 2*l_i) applying `forall`, see `ComputeDoubles()`
 - compute the sum of all elements in a list applying a left fold (`list_foldl`), see `SumElements112()`
 
-See also [Recursion smart contract](./contracts/Recursion.scilla) on how to build a list [m, m+1, ..., n-1] for parameters `m` and `n`.
+See also 
+- [InitParams smart contract](./contracts/InitParams.scilla) on how to initialize a list that is a field using a parameter at deployment.
+- [Recursion smart contract](./contracts/Recursion.scilla) on how to build a list [m, m+1, ..., n-1] for parameters `m` and `n`.
 
 Script: [List.js](./js/List.js).
 
