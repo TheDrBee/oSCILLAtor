@@ -63,7 +63,7 @@ The [InitParams smart contract](./contracts/InitParams.scilla) shows
 - how to initialize a list not to an empty list (`nil`) but to a list `[element, 1, 2]` where `element` is an init parameter
 - how to check init parameters using `with .... =>` by checking if the given `element` is smaller then 10. If not, the deployment fails.
 
-Script: [InitParams](./js/InitParams.js)
+Script: [InitParams](./js/InitParams.js).
 
 
 ### Integers
