@@ -70,6 +70,9 @@ Script: [InitParams](./js/InitParams.js).
 The [Integer smart contract](./contracts/Integers.scilla) shows operations on integer types:
 - how to compare using [IntUtils library](https://scilla.readthedocs.io/en/latest/scilla-in-depth.html#intutils)
 
+See also 
+- [InitParams smart contract](./contracts/InitParams.scilla) on how to compare integers at deployment.
+
 
 ### List
 The [List smart contract](./contracts/List.scilla) shows list manipulations and use cases of the library `ListUtils`. It shows application of predicates and curried functions:
