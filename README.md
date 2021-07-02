@@ -90,6 +90,14 @@ See also
 
 Script: [List.js](./js/List.js).
 
+### Nat Type 
+The [NatType smart contract](./contracts/NatType.scilla) shows an example for the builtin ADT `Nat`. It implements a counter that can be increased and decreased, but is floored at 0. The 'Nat' type is an implementation of the "Peano numbers" and "Peano Axioms" that lead to the natural numbers 0, 1, 2, ...
+The examples show how to 
+- get the first Peano number `Zero` by initializing the `field counter` to it
+- get the next Peano number using `Succ` (see `transition Increase()`)
+- get the previous Peano number using `nat_prev` from `NatUtils` (note that 0 has no precessor), see `transition DecreaseFlooredAtZero()`
+- get the natural number (as a `Uint32`) out of a Peano number using `nat_to_int` from `NatUtils`, see `procedure EmitCounterAsNumber()`. Compare the `field counter` in the contract's state to the `counter_value` emitted in the event!
+
 ### Option Type
 The [Option smart contract](./contracts/Option.scilla) shows how to
 - create the empty option type using `None` constructor

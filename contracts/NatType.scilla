@@ -1,0 +1,42 @@
+scilla_version 0
+(***************************************************)
+(* The built-in ADT "Nat"                          *)
+(***************************************************)
+import NatUtils
+
+contract NatType()
+
+field counter: Nat = Zero
+
+(* emit the current value of the counter in an event *)
+procedure EmitCounterAsNumber()
+  c <- counter;
+  number = nat_to_int c; (* from NatUtils *)
+  ev = {_eventname : "EmitCounter"; counter_value: number};
+  event ev
+end
+
+(* Increase the counter: get next Peano Number *)
+transition Increase()
+  c <- counter;
+  next = Succ c;
+  counter := next;
+  EmitCounterAsNumber
+end
+
+(* Decrease the counter: get previous Peano Number    *)
+(* floored at Zero, i.e. there is no previous to Zero *)
+transition DecreaseFlooredAtZeo()
+  c <- counter;
+  previous_opt = nat_prev c; (* from NatUtils *)
+  previous = let p =
+    match previous_opt with
+    | None => (* counter was Zero, remains at Zero *)
+      Zero
+    | Some x =>
+      x
+    end in (* previous_opt *)
+  p;
+  counter := previous;
+  EmitCounterAsNumber
+end
