@@ -117,7 +117,7 @@ Script: [Ownership.js](./js/Ownership.js).
 ### Recursion
 The [Recursion smart contract](./contracts/Recursion.scilla) shows how to use recursion in Scilla. 
 - create a list [m, m+1, ..., n-1] where `m` and `n` are inputs, see `transition CreateList(m : Uint32, n : Uint32)`
-- compute the factorial of `n`: n! = 0 if n=0 and else n! = n*(n-1)*...*1, see `transition Factorial(n: Uint32)`
+- compute the factorial of `n`: n! = 1 if n=0 and else n! = n*(n-1)*...*1, see `transition Factorial(n: Uint32)`
 
 
 ### SetGet

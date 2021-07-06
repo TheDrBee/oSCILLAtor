@@ -48,7 +48,7 @@ let factorial : Uint32 ->  Uint32 =
   fun (n : Uint32) =>
     let is_n_gt_zero = uint32_gt n zero32 in
     match is_n_gt_zero with
-    | False => n (* 0!=0 *)
+    | False => one32 (* 0!=1 *)
     | True => (* res = res * (n-1) unless n=1 then res = res *)
       let n_nat = builtin to_nat n in
       let acc_init = Pair {Uint32 Uint32} n n in
