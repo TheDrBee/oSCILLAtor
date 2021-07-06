@@ -98,6 +98,8 @@ The examples show how to
 - get the previous Peano number using `nat_prev` from `NatUtils` (note that 0 has no precessor), see `transition DecreaseFlooredAtZero()`
 - get the natural number (as a `Uint32`) out of a Peano number using `nat_to_int` from `NatUtils`, see `procedure EmitCounterAsNumber()`. Compare the `field counter` in the contract's state to the `counter_value` emitted in the event!
 
+See also the [Recursion smart contract](./contracts/Recursion.scilla) for applications of `nat_fold` to implement recursion using the `Nat` ADT.
+
 ### Option Type
 The [Option smart contract](./contracts/Option.scilla) shows how to
 - create the empty option type using `None` constructor
@@ -115,6 +117,7 @@ Script: [Ownership.js](./js/Ownership.js).
 ### Recursion
 The [Recursion smart contract](./contracts/Recursion.scilla) shows how to use recursion in Scilla. 
 - create a list [m, m+1, ..., n-1] where `m` and `n` are inputs, see `transition CreateList(m : Uint32, n : Uint32)`
+- compute the factorial of `n`: n! = 0 if n=0 and else n! = n*(n-1)*...*1, see `transition Factorial(n: Uint32)`
 
 
 ### SetGet
