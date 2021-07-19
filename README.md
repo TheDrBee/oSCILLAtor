@@ -16,14 +16,18 @@ In order to run the JS scripts install [ceres](https://github.com/Zilliqa/ceres/
 ## Examples
 
 ### Adt
-How to define and use (user defined) algebraic data types (ADTs)
-The [Adt smart contract](./contracts/Adt.scilla) defines and ADT `Item` which can be a shirt or a barbell. An Item has a weight (a `Uint32`). Then, an
+How to define and use (user defined) algebraic data types (ADTs), and how to call transitions using the JS lib with ADT arguments:
+
+1) The [Adt smart contract](./contracts/Adt.scilla) defines and ADT `Item` which can be a shirt or a barbell. An Item has a weight (a `Uint32`). Then, an
 ADT `Parcel` is defined that consists of either one or two Items. The Items must not necessarily be of the same type, so a Parcel can contain a shirt and a barbell, for example. 
 Depending on the (total) weight of the contents of a Parcel (the weight of the item(s) it contains) the shipping cost is computed. Finally, the Parcel is stored 
 together with its shipping cost in a list. 
 
 This also shows application of the builtin ADT [Pair](https://scilla.readthedocs.io/en/latest/scilla-in-depth.html#pair): The list entries are `Pair {Parcel Uint32}`, i.e., pairs (parcel, shipping cost).
 
+2. The [Script ADTInterfacing.js](./js/ADTInterfacing.js) shows how to call transitions that have an ADT as argument:
+- A user defined ADT needs to be pre-fixed with the contracts address, see the call to `transition ABTest(v: AB)`.
+- A list needs to be constructed using `Nil` and `Cons`, similar to the way of constructing it in Scilla, see the call to `transition ListTest(list: List String)` which shows this for a list of strings: ["A", "B"]
 
 ### AdtMap
 How to create a map storing user defined algebraic data types (ADTs):
