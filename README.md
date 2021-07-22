@@ -48,7 +48,7 @@ How to send a message to another smart contract and get a result back:
 The [Caller smart contract](./contracts/Caller.scilla) calls The [Callee smart contract](./contracts/Callee.scilla) to retrieve a value:
 1) caller sends msg to callee's transition `GetValue` in its transition `CallForValue()`.
 2) callee sends msg to caller's callback: transition `ValueCallback(v : Uint128)` with `v` the value stored in its `field value`.
-3) the caller receive the value, stores it in its `field value` and emits an event.
+3) the caller receives the value, stores it in its `field value` and emits an event.
 
 Script: [Callback.js](./js/Callback.js).
 
