@@ -1,6 +1,16 @@
 /* Interfacing with transitions taking ADTs:
   - a user defined ADT: need format contract_address.type
   - a List: need to build the list using Nil and Cons, similar to scilla
+  - an Option type (Amrit)
+
+  {
+            "constructor": "Some",
+            "argtypes"   : [ "ByStr20" ],
+            "arguments"  : [
+                "0x1234567890123456789012345678906784567890"
+            ]
+    }
+
 */
 const {
   setup,
@@ -62,7 +72,7 @@ async function run()
         // Note the special way of constructing the list using Nil and Cons (front inserting an element into existing list)
         const nil = {constructor: "Nil",  argtypes: ["String", ], arguments: [] };
         const lB  = {constructor: "Cons", argtypes: ["String"],   arguments: ["B", nil] };
-        const lAB  = {constructor: "Cons", argtypes: ["String"],   arguments: ["A", lB] };
+        const lAB = {constructor: "Cons", argtypes: ["String"],   arguments: ["A", lB] };
         args =  [ { vname: 'list',  type: 'List String', value: lAB, }, ];
         let tx = await sc.call(
           'ListTest',
