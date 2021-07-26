@@ -7,12 +7,18 @@ contract ADTTest()
 
 (* transition with user defined ADT argument *)
 transition ABTest(v: AB)
-ev = {_eventname: "ABTest"; value : v};
-event ev
+  ev = {_eventname: "ABTest"; value : v};
+  event ev
 end
 
 (* transition with List argument *)
 transition ListTest(list: List String)
-ev = {_eventname: "ListTest"; list: list};
-event ev
+  ev = {_eventname: "ListTest"; list: list};
+  event ev
+end
+
+(* transition with Option argumen *)
+transition OptionTest(option: Option Uint32)
+  ev = {_eventname: "OptionTest"; option: option };
+  event ev
 end
