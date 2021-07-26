@@ -1,16 +1,7 @@
 /* Interfacing with transitions taking ADTs:
   - a user defined ADT: need format contract_address.type
   - a List: need to build the list using Nil and Cons, similar to scilla
-  - an Option type (Amrit)
-
-  {
-            "constructor": "Some",
-            "argtypes"   : [ "ByStr20" ],
-            "arguments"  : [
-                "0x1234567890123456789012345678906784567890"
-            ]
-    }
-
+  - an Option type
 */
 const {
   setup,
@@ -37,13 +28,7 @@ async function run()
     try { // call transition ABTest
       // Note the special type and value for a user defined ADT (AB here)
       let args = [ { vname: "v", type: `${sc_addr}.AB`,  value: {constructor: `${sc_addr}.A`, argtypes: [], arguments: [] }},];
-      tx = await sc.call(
-        'ABTest',
-        args,
-        { version: setup.VERSION, amount: new BN(0), gasPrice: tx_settings.gas_price,
-          gasLimit: tx_settings.gas_limit,  },
-        tx_settings.attempts, tx_settings.timeout, true,
-      );
+      tx = await sc_call(sc, "ABTest", args);
 
       console.log("  .. ABTest: tx.receipt.event_logs[0].params:\n", tx.receipt.event_logs[0].params);
 
@@ -53,26 +38,15 @@ async function run()
         const lB  = {constructor: "Cons", argtypes: ["String"],   arguments: ["B", nil] };
         const lAB = {constructor: "Cons", argtypes: ["String"],   arguments: ["A", lB] };
         args =  [ { vname: 'list',  type: 'List String', value: lAB, }, ];
-        tx = await sc.call(
-          'ListTest',
-          args,
-          { version: setup.VERSION, amount: new BN(0), gasPrice: tx_settings.gas_price,
-            gasLimit: tx_settings.gas_limit,  },
-          tx_settings.attempts, tx_settings.timeout, true,
-        );
+        tx = await sc_call(sc, "ListTest", args);
 
         console.log("  .. ListTest: tx.receipt.event_logs[0].params:\n", tx.receipt.event_logs[0].params);
 
-        try { // call transition OptionTest
+        try { // call transition OptionTest with an Option Uint32 that has a value of 15
           // Note how to create the argument value for 'option'
           args = [ {vname: 'option', type: 'Option Uint32', value: {constructor: 'Some', argtypes: ['Uint32'], arguments: ['15']}}, ];
-          tx = await sc.call(
-            'OptionTest',
-            args,
-            { version: setup.VERSION, amount: new BN(0), gasPrice: tx_settings.gas_price,
-              gasLimit: tx_settings.gas_limit,  },
-            tx_settings.attempts, tx_settings.timeout, true,
-          );
+          tx = await sc_call(sc, "OptionTest", args);
+
           console.log("  .. OptionTest: tx.receipt.event_logs[0].params.value:\n", tx.receipt.event_logs[0].params[0].value);
         }
         catch (err) {
