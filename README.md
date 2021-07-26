@@ -27,7 +27,8 @@ This also shows application of the builtin ADT [Pair](https://scilla.readthedocs
 
 2. The [Script ADTInterfacing.js](./js/ADTInterfacing.js) shows how to call transitions that have an ADT as argument (in the [ADTInterfacing smart contract](./contracts/ADTInterfacing.scilla)):
 - A user defined ADT needs to be pre-fixed with the contracts address, see the call to `transition ABTest(v: AB)`.
-- A list needs to be constructed using `Nil` and `Cons`, similar to the way of constructing it in Scilla, see the call to `transition ListTest(list: List String)` which shows this for a list of strings: ["A", "B"]
+- A list needs to be an array of the elements, or can be constructed using `Nil` and `Cons`, similar to the way of constructing it in Scilla, see the call to `transition ListTest(list: List String)` which shows this for 2 lists of strings: ["A", "B", "C"] and ["A", "B"]
+- An option needs to be constructed using `Some` constructor and the value in `arguments`, see the call to `transition OptionTest(option: Option Uint32)` which shows this for an Option ADT holding a Uint32 value.
 
 ### AdtMap
 How to create a map storing user defined algebraic data types (ADTs):
