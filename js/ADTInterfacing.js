@@ -12,12 +12,6 @@ const { BN, Long, units, bytes } = require('@zilliqa-js/util');
 
 async function run()
 {
-  const tx_settings = {
-    "gas_price": units.toQa('2000', units.Units.Li),
-    "gas_limit": Long.fromNumber(50000),
-    "attempts": Long.fromNumber(10),
-    "timeout": 1000,
-  };
   try { // deploy
 
     const init = [ { vname: '_scilla_version',     type: 'Uint32',   value: '0',}, ];
