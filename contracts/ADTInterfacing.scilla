@@ -1,0 +1,18 @@
+scilla_version 0
+
+library ADTTest
+type AB = | A | B (* The test ADT *)
+
+contract ADTTest()
+
+(* transition with user defined ADT argument *)
+transition ABTest(v: AB)
+ev = {_eventname: "ABTest"; value : v};
+event ev
+end
+
+(* transition with List argument *)
+transition ListTest(list: List String)
+ev = {_eventname: "ListTest"; list: list};
+event ev
+end

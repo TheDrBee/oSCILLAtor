@@ -14,6 +14,7 @@
 */
 const {
   setup,
+  deploy_from_file,
   sc_call } = require("./blockchain.js");
 
 const { BN, Long, units, bytes } = require('@zilliqa-js/util');
@@ -27,37 +28,15 @@ async function run()
     "timeout": 1000,
   };
   try { // deploy
-    const code =
-    `scilla_version 0
-    library ADTTest
-    type AB = | A | B (* The test ADT *)
-    contract ADTTest()
-
-    transition ABTest(v: AB)
-      ev = {_eventname: "ABTest"; value : v};
-      event ev
-    end
-
-    transition ListTest(list: List String)
-      ev = {_eventname: "ListTest"; list: list};
-      event ev
-    end `
 
     const init = [ { vname: '_scilla_version',     type: 'Uint32',   value: '0',}, ];
-    const contract = setup.zilliqa.contracts.new(code, init);
-    [tx, sc] = await contract.deploy(
-      { version: setup.VERSION, gasPrice: tx_settings.gas_price, gasLimit: tx_settings.gas_limit, },
-      tx_settings.attempts, tx_settings.timeoute, false
-    );
+    [tx, sc] = await deploy_from_file("../contracts/ADTInterfacing.scilla", init);
+    console.log("contract deployed @ ", sc.address);
     const sc_addr = sc.address.toLowerCase(); // Important: only lower case format works
-    const loaded_code = await setup.zilliqa.blockchain.getSmartContractCode(sc_addr);
-    console.log("code of loaded smart contract:\n", loaded_code.result.code);
 
     try { // call transition ABTest
-
       // Note the special type and value for a user defined ADT (AB here)
       let args = [ { vname: "v", type: `${sc_addr}.AB`,  value: {constructor: `${sc_addr}.A`, argtypes: [], arguments: [] }},];
-
       let tx = await sc.call(
         'ABTest',
         args,
@@ -92,7 +71,7 @@ async function run()
         console.log("ABTest(.): ERROR\n",err);
     }
   } catch (err) {
-    console.log("contracts.at(.): ERROR\n",err);
+    console.log("deployment: ERROR\n",err);
   }
 }
 
