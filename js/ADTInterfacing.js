@@ -1,6 +1,6 @@
 /* Interfacing with transitions taking ADTs:
   - a user defined ADT: need format contract_address.type
-  - a List: need to build the list using Nil and Cons, similar to scilla
+  - a List: can use the format ["A", "B", "C"] or need to build the list using Nil and Cons, similar to scilla
   - an Option type
 */
 const {
@@ -32,7 +32,15 @@ async function run()
 
       console.log("  .. ABTest: tx.receipt.event_logs[0].params:\n", tx.receipt.event_logs[0].params);
 
-      try { // call ListTest with a 2 element string list ["A", "B"]
+      try {
+        // call ListTest with a 3 element string list ["A", "B", "C"]. The simple way
+        // Note that value is an array of strings but not a string itself
+        args =  [ { vname: 'list',  type: 'List String', value: ["A", "B", "C"], }, ];
+        tx = await sc_call(sc, "ListTest", args);
+
+        console.log("  .. ListTest: tx.receipt.event_logs[0].params:\n", tx.receipt.event_logs[0].params);
+
+        // call ListTest with a 2 element string list ["A", "B"]. The complicated but most general way
         // Note the special way of constructing the list using Nil and Cons (front inserting an element into existing list)
         const nil = {constructor: "Nil",  argtypes: ["String", ], arguments: [] };
         const lB  = {constructor: "Cons", argtypes: ["String"],   arguments: ["B", nil] };
@@ -41,6 +49,7 @@ async function run()
         tx = await sc_call(sc, "ListTest", args);
 
         console.log("  .. ListTest: tx.receipt.event_logs[0].params:\n", tx.receipt.event_logs[0].params);
+
 
         try { // call transition OptionTest with an Option Uint32 that has a value of 15
           // Note how to create the argument value for 'option'
