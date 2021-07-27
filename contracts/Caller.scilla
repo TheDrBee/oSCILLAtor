@@ -18,7 +18,8 @@ contract Caller
 field callee: ByStr20 = init_callee
 field value: Uint128 = Uint128 0
 
-(* calls the callee and ask to call back with value *)
+(* calls the callee's GetValue transition, i.e asks *)
+(* to be called back with value                     *)
 transition CallForValue()
   to <- callee;
   msg = {_tag : "GetValue"; _recipient : to; _amount : zero};
