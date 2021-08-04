@@ -21,6 +21,10 @@ field value: Uint128 = Uint128 0
    calls the caller's "value_callback(v)" with the value *)
 transition GetValue()
   val <- value;
+  (* _sender is callee contract
+     _origin is user account that initiated tx by calling  CallForValue() *)
+  ev = {_eventname: "GetValue"; sender: _sender; origin: _origin};
+  event ev;
   msg = {_tag : "ValueCallback"; _recipient : _sender; _amount : zero; v: val};
   msgs = one_msg msg;
   send msgs
@@ -29,6 +33,6 @@ end
 (* set the value (initially it is 0) *)
 transition SetValue(new_value : Uint128)
   value := new_value;
-  e = {_eventname : "SetValueSuccess"; value : new_value};
-  event e
+  ev = {_eventname : "SetValueSuccess"; value : new_value};
+  event ev
 end

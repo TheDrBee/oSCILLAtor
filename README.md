@@ -51,6 +51,8 @@ The [Caller smart contract](./contracts/Caller.scilla) calls The [Callee smart c
 2) callee sends msg to caller's callback: transition `ValueCallback(v : Uint128)` with `v` the value stored in its `field value`.
 3) the caller receives the value, stores it in its `field value` and emits an event.
 
+Further, this examples shows the usage of `_origin` which is the user account address that initiated the transaction: Inside the `GetValue()` transition of the callee, `_origin` is not the same as `_sender`, which is the caller contract. See the event `"GetValue"` in `GetValue()`.
+
 Script: [Callback.js](./js/Callback.js).
 
 ### Funds

@@ -1,11 +1,12 @@
 /* deploy the Caller and Callee contracts and call - callback   */
 
-const { deploy_from_file, sc_call } = require("./blockchain.js");
+const { setup, deploy_from_file, sc_call } = require("./blockchain.js");
 
 async function run()
 {
   let tx = sc_callee = sc_caller = state = null;
   try { // deploy the callee and then the caller with callee's address
+    console.log("address of user account:   ", setup.addresses[0]);
     let init = [ { vname: '_scilla_version', type: 'Uint32', value: '0',},];
     [tx, sc_callee] = await deploy_from_file("../contracts/Callee.scilla", init);
     console.log("contract Callee deployed @ ", sc_callee.address);
@@ -21,6 +22,7 @@ async function run()
       try { // cal call_for_value() on Caller and log state
         tx = await sc_call(sc_caller, "CallForValue", []);
         state = await sc_caller.getState();
+        console.log(`event emitted in GetValue(.):\n`, tx.receipt.event_logs[0]);
         console.log(`state of Caller after call to CallForValue(.):\n`, state);
       } catch (err) {
         console.log("CallForValue(.): ERROR\n",err)
