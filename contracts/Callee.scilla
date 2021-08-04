@@ -17,8 +17,8 @@ contract Callee()
 
 field value: Uint128 = Uint128 0
 
-(* the transition to be called by the Caller contract:
-   calls the caller's "value_callback(v)" with the value *)
+(* the transition to be called by the Caller contract:  *)
+(*  calls the caller's "ValueCallback(v)" with the value *)
 transition GetValue()
   val <- value;
   (* _sender is callee contract
