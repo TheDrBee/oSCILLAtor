@@ -18,17 +18,13 @@ In order to run the JS scripts install [ceres](https://github.com/Zilliqa/ceres/
 ### Adt
 How to define and use (user defined) algebraic data types (ADTs), and how to call transitions using the JS lib with ADT arguments:
 
-1) The [Adt smart contract](./contracts/Adt.scilla) defines and ADT `Item` which can be a shirt or a barbell. An Item has a weight (a `Uint32`). Then, an
+1. The [Adt smart contract](./contracts/Adt.scilla) defines and ADT `Item` which can be a shirt or a barbell. An Item has a weight (a `Uint32`). Then, an
 ADT `Parcel` is defined that consists of either one or two Items. The Items must not necessarily be of the same type, so a Parcel can contain a shirt and a barbell, for example. 
 Depending on the (total) weight of the contents of a Parcel (the weight of the item(s) it contains) the shipping cost is computed. Finally, the Parcel is stored 
 together with its shipping cost in a list. 
-
 This also shows application of the builtin ADT [Pair](https://scilla.readthedocs.io/en/latest/scilla-in-depth.html#pair): The list entries are `Pair {Parcel Uint32}`, i.e., pairs (parcel, shipping cost).
 
-2. The [Script ADTInterfacing.js](./js/ADTInterfacing.js) shows how to call transitions that have an ADT as argument (in the [ADTInterfacing smart contract](./contracts/ADTInterfacing.scilla)):
-- A user defined ADT needs to be pre-fixed with the contracts address, see the call to `transition ABTest(v: AB)`.
-- A list needs to be an array of the elements, or can be constructed using `Nil` and `Cons`, similar to the way of constructing it in Scilla, see the call to `transition ListTest(list: List String)` which shows this for 2 lists of strings: ["A", "B", "C"] and ["A", "B"]
-- An option needs to be constructed using `Some` constructor and the value in `arguments`, see the call to `transition OptionTest(option: Option Uint32)` which shows this for an Option ADT holding a Uint32 value.
+2. The [Script Interfacing.js](./js/Interfacing.js) shows how to call transitions that have built in and user defined ADTs as argument, i.e. how to create the 'args' in JS, see [Interfacing below](#interfacing).
 
 ### AdtMap
 How to create a map storing user defined algebraic data types (ADTs):
@@ -80,6 +76,14 @@ The [Integer smart contract](./contracts/Integers.scilla) shows operations on in
 See also 
 - [InitParams smart contract](./contracts/InitParams.scilla) on how to compare integers at deployment.
 
+
+### Interfacing: Special API calls from JS SDK <a id='interfacing'/>
+The [Script Interfacing.js](./js/Interfacing.js) shows how to call transitions that have more complex types (even user defined ADTs) as argument (in the [Interfacing smart contract](./contracts/ADTInterfacing.scilla)):
+
+- A user defined ADT needs to be pre-fixed with the contracts address, see the call to `transition ABTest(v: AB)`.
+- A list needs to be an array of the elements, or can be constructed using `Nil` and `Cons`, similar to the way of constructing it in Scilla, see the call to `transition ListTest(list: List String)` which shows this for 2 lists of strings: ["A", "B", "C"] and ["A", "B"]
+- An Option needs to be constructed using `Some` constructor and the value in `arguments`, see the call to `transition OptionTest(option: Option Uint32)` which shows this for an Option ADT holding a Uint32 value.
+- A Pair needs to be constructed using the `Pair` constructor, both types in `argtypes` and the two values in `arguments`, see the call to transition `PairTest(pair: Pair Uint32 String)` which shows this for an example of a pair (1, "Hello").
 
 ### List
 The [List smart contract](./contracts/List.scilla) shows list manipulations and use cases of the library `ListUtils`. It shows application of predicates and curried functions:

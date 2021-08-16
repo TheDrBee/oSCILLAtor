@@ -2,6 +2,7 @@
   - a user defined ADT: need format contract_address.type
   - a List: can use the format ["A", "B", "C"] or need to build the list using Nil and Cons, similar to scilla
   - an Option type
+  - a Pair type
 */
 const {
   setup,
@@ -15,7 +16,7 @@ async function run()
   try { // deploy
 
     const init = [ { vname: '_scilla_version',     type: 'Uint32',   value: '0',}, ];
-    [tx, sc] = await deploy_from_file("../contracts/ADTInterfacing.scilla", init);
+    [tx, sc] = await deploy_from_file("../contracts/Interfacing.scilla", init);
     console.log("contract deployed @ ", sc.address);
     const sc_addr = sc.address.toLowerCase(); // Important: only lower case format works
 
@@ -51,6 +52,18 @@ async function run()
           tx = await sc_call(sc, "OptionTest", args);
 
           console.log("  .. OptionTest: tx.receipt.event_logs[0].params.value:\n", tx.receipt.event_logs[0].params[0].value);
+
+          try { // call transition PairTest with a Pair Uint32 String that has value (1, "Hello")
+            // Note how to create the argument for the pair and the parenthesis needed aroung the types of its engries (Uint32 and String)
+            args = [ {vname: 'pair', type: 'Pair (Uint32) (String)', value: {constructor: 'Pair', argtypes: ['Uint32', 'String'], arguments: ['1', 'Hello']}}, ];
+            tx = await sc_call(sc, "PairTest", args);
+
+            console.log(" .. PairTest: tx.receipt.event_logs[0].params.value:\n", tx.receipt.event_logs[0].params[0].value);
+
+          }
+          catch (err) {
+            console.log("PairTest(.): Error\n", err);
+          }
         }
         catch (err) {
           console.log("OptionTest(.): Error\n", err);

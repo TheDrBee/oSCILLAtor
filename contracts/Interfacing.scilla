@@ -1,9 +1,9 @@
 scilla_version 0
 
-library ADTTest
+library Interfacing
 type AB = | A | B (* The test ADT *)
 
-contract ADTTest()
+contract Interfacing()
 
 (* transition with user defined ADT argument *)
 transition ABTest(v: AB)
@@ -20,5 +20,11 @@ end
 (* transition with Option argumen *)
 transition OptionTest(option: Option Uint32)
   ev = {_eventname: "OptionTest"; option: option };
+  event ev
+end
+
+(* transition with Pair (Uint32, String) argument *)
+transition PairTest(pair: Pair Uint32 String)
+  ev = {_eventname: "PairTest"; pair: pair };
   event ev
 end
