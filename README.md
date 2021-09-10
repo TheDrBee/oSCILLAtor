@@ -137,7 +137,6 @@ Script: [RemoteRead.js](./js/RemoteRead.js).
 
 **Note**: This is currently not working throught the [IDE](https://ide.zilliqa.com/#/) as it needs to be upgraded to handle address types correctly first. It works, however, when calling the transition using the JS SDK (as in the [script](./js/RemoteRead.js)).
 
-
 ### SetGet
 The [SetGet smart contract](./contracts/SetGet.scilla) shows how to modify a state variable through a transition, and how to emit the value of a state variable in an event.
 
