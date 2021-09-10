@@ -130,6 +130,13 @@ The [Recursion smart contract](./contracts/Recursion.scilla) shows how to use re
 - create a list [m, m+1, ..., n-1] where `m` and `n` are inputs, see `transition CreateList(m : Uint32, n : Uint32)`
 - compute the factorial of `n`: n! = 1 if n=0 and else n! = n*(n-1)*...*1, see `transition Factorial(n: Uint32)`
 
+### Remote State Read
+The [RemoteRead smart contract](./contracts/RemoteRead.scilla) shows how to read a field from a differnt contract deployed on the chain: The transition `ReadValueFromSetGet(.)` reads the field `value` from the smart contract [SetGet](./contracts/SetGet.scilla), see below. 
+
+Script: [RemoteRead.js](./js/RemoteRead.js).
+
+Note: This is currently not working throught the [IDE](https://ide.zilliqa.com/#/) as it needs to be upgraded to handle address types correctly first. It works, however, when calling the transition using the JS SDK (as in the [script](./js/RemoteRead.js)).
+
 
 ### SetGet
 The [SetGet smart contract](./contracts/SetGet.scilla) shows how to modify a state variable through a transition, and how to emit the value of a state variable in an event.
