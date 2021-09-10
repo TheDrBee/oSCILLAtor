@@ -1,0 +1,11 @@
+scilla_version 0
+
+contract RemoteRead
+()
+
+(* read a value from a contract that has a field value of type Uint128 *)
+transition ReadValueFromSetGet(c: ByStr20 with contract field value: Uint128 end)
+  value <- & c.value;
+  ev = {_eventname : "ReadValueFromSetGet"; value: value};
+  event ev
+end
