@@ -28,3 +28,9 @@ transition PairTest(pair: Pair Uint32 String)
   ev = {_eventname: "PairTest"; pair: pair };
   event ev
 end
+
+(* transition with Bool argument *)
+transition BoolTest(bool: Bool)
+  ev = {_eventname: "BoolTest"; bool: bool };
+  event ev
+end

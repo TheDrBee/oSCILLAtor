@@ -60,6 +60,16 @@ async function run()
 
             console.log(" .. PairTest: tx.receipt.event_logs[0].params.value:\n", tx.receipt.event_logs[0].params[0].value);
 
+            try { // call transition BoolTest with a boolean argurment.
+              args = [ { vname: 'bool', type: 'Bool',  value: {constructor: 'True', argtypes: [], arguments: [] }},];
+              tx = await sc_call(sc, "BoolTest", args);
+
+              console.log(" .. BoolTest: tx.receipt.event_logs[0].params.value:\n", tx.receipt.event_logs[0].params[0].value);
+
+            }
+            catch (err) {
+              console.log("BoolTest(.): Error\n", err);
+            }
           }
           catch (err) {
             console.log("PairTest(.): Error\n", err);
