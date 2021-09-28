@@ -22,6 +22,7 @@ async function run()
       console.log(`field value in SetGet after call to Set(${value}):`, sst.value);
       try { // deploy RemoteRead contract
         [tx, sc] = await deploy_from_file("../contracts/RemoteRead.scilla", init);
+        console.log(tx.receipt);
         console.log("contract RemoteRead deployed @ ", sc.address);
         try { // call ReadValueFromSetGet transition to read the value from the SetGet contract
           args = [ { vname: 'c', type: 'ByStr20',  value: set_get_addr },];
@@ -29,12 +30,20 @@ async function run()
           tx = await sc_call(sc, "ReadValueFromSetGet", args);
           console.log("event emitted\n", tx.receipt.event_logs[0]);
           console.log("event's params Object\n", tx.receipt.event_logs[0].params);
-        }
-        catch (err) {
+/* not yet supported by ceres
+          try { // call ReadValueFromSetGet2 transition to read the value from the SetGet
+            console.log(".. calling ReadValueFromSetGet2 on RemoteRead contract ..")
+            tx = await sc_call(sc, "ReadValueFromSetGet2", args);
+            console.log("event emitted\n", tx.receipt.event_logs[0]);
+            console.log("event's params Object\n", tx.receipt.event_logs[0].params);
+          } catch (err) {
+            console.log("ReadValueFromSetGet2(.): ERROR\n", err);
+          }
+          */
+        } catch (err) {
           console.log("ReadValueFromSetGet(.): ERROR\n", err);
         }
-      }
-      catch (err) {
+      } catch (err) {
         console.log("deploy_from_file(.): ERROR\n",err);
       }
     } catch (err) {
