@@ -3,9 +3,28 @@ scilla_version 0
 contract RemoteRead
 ()
 
-(* read a value from a contract that has a field value of type Uint128 *)
+(* read a value from a contract that has a field value of type Uint128  *)
 transition ReadValueFromSetGet(c: ByStr20 with contract field value: Uint128 end)
   value <- & c.value;
   ev = {_eventname : "ReadValueFromSetGet"; value: value};
   event ev
 end
+
+(* read a value from a contract that has afield value of type Uint128   *)
+(* version #2: do not define the address type as a transition parameter *)
+(*              but only inside the transition: Address type cast       *)
+
+(* doesn't work yet on ceres
+transition ReadValueFromSetGet2(addr: ByStr20)
+  contract_opt <- &addr as ByStr20 with contract field value: Uint128 end;
+  match contract_opt with
+  | Some c =>
+    value <- &c.value;
+    ev = {_eventname : "ReadValueFromSetGet2"; value: value};
+    event ev
+  | None => 
+    ev = {_eventname : "ReadValueFromSetGet2Failure"};
+    event ev
+  end
+end
+*)
