@@ -78,7 +78,7 @@ See also
 
 
 ### Interfacing: Special API calls from JS SDK <a id='interfacing'/>
-The [Script Interfacing.js](./js/Interfacing.js) shows how to call transitions that have more complex types (even user defined ADTs) as argument (in the [Interfacing smart contract](./contracts/ADTInterfacing.scilla)):
+The [Script Interfacing.js](./js/Interfacing.js) shows how to call transitions that have more complex types (even user defined ADTs) as argument (in the [Interfacing smart contract](./contracts/Interfacing.scilla)):
 
 - A user defined ADT needs to be pre-fixed with the contracts address, see the call to `transition ABTest(v: AB)`.
 - A list needs to be an array of the elements, or can be constructed using `Nil` and `Cons`, similar to the way of constructing it in Scilla, see the call to `transition ListTest(list: List String)` which shows this for 2 lists of strings: ["A", "B", "C"] and ["A", "B"]
