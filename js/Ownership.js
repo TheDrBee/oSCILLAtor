@@ -4,6 +4,7 @@ const {
   setup,
   deploy_from_file,
   sc_call } = require("./blockchain.js");
+const { BN } = require('@zilliqa-js/util');
 
 async function run()
 {
@@ -38,6 +39,18 @@ async function run()
         console.log(`state after call to ChangeOwner(${new_owner}):\n`, state);
         try { // call IsOwnerCalling(.) and log emitted events params indicating if caller was the owner
           await call_IsOwnerCalling();
+          try {
+            // call ChangeOwnrByOwnerOnly from addresses[0] which is not the owner and log the event
+            tx = await sc_call(sc, "ChangeOwnerByOwnerOnly", args);
+            console.log(`_eventname after calling ChangeOwnrByOwnerOnly from address that is not owner:\n`,
+              tx.receipt.event_logs[0]._eventname);
+            // call ChangeOwnrByOwnerOnly from addresses[1] which is the owner and change owner back to address[0]
+            args = [ { vname: 'new_owner', type: 'ByStr20',  value: setup.addresses[0] },];
+            tx = await sc_call(sc, "ChangeOwnerByOwnerOnly", args, new BN('0'), setup.pub_keys[1])
+            console.log(`_eventname after calling ChangeOwnrByOwnerOnly from address that is owner:\n`,
+              tx.receipt.event_logs[0]._eventname);
+          }
+          catch (err) { console.log("ChangeOwnerByOwnerOnly(.): ERROR\n", err); }
         }
         catch (err) { console.log("IsOwnerCalling(): ERROR\n",err); }
       }
