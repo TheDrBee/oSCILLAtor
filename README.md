@@ -123,12 +123,13 @@ The [Option smart contract](./contracts/Option.scilla) shows how to
 Script: [Option.js](./js/Option.js).
 
 ### Ownership
-The [Ownership smart contract](./contracts/Ownership.scilla) shows how a smart contract can have an owner, and how to check if the caller of a transition (the `_sender` of the transaction) is the owner.
+The [Ownership smart contract](./contracts/Ownership.scilla) shows how a smart contract can have an owner, and how to check if the caller of a transition (the `_origin` of the transaction) is the owner.
 
-It shows two simple ways of how to change the owner 
-- `transition ChangeOwner(new_owner : ByStr20)`: here everybody can change the owner to any address, which is very dangerous and should not be done
-- `transition ChangeOwnerByOwnerOnly(new_owner : ByStr20)`: here only the onwer can change the ownership. This is better, yet still problematic as the `new_owner` might be wrong (a typo is enough...), and thus the contract will have either a wrong owner, or even worse a non-existing owner.
-- The suggested way of transfering ownership, see [Scilla Documentation](https://scilla.readthedocs.io/en/latest/scilla-tips-and-tricks.html#transfer-contract-ownership):
+It shows three ways of how to change the owner of the contract:
+
+- `transition ChangeOwner(new_owner : ByStr20)`: here everybody can change the owner to any address, which is very dangerous and **should not be done**
+- `transition ChangeOwnerByOwnerOnly(new_owner : ByStr20)`: here only the onwer can change the ownership. This is better, yet **still problematic** as the `new_owner` might be wrong (a typo is enough...), and thus the contract will have either a wrong owner, or even worse a non-existing owner.
+- The suggested way of transfering ownership, see [Scilla Documentation](https://scilla.readthedocs.io/en/latest/scilla-tips-and-tricks.html#transfer-contract-ownership) -- **use this in practice**:
 
   1. The current owner proposes (stages) a new owner: `transition RequestOwnershipTransfer(new_owner : ByStr20)`
 
