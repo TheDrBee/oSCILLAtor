@@ -46,10 +46,39 @@ async function run()
               tx.receipt.event_logs[0]._eventname);
             // call ChangeOwnrByOwnerOnly from addresses[1] which is the owner and change owner back to address[0]
             args = [ { vname: 'new_owner', type: 'ByStr20',  value: setup.addresses[0] },];
-            tx = await sc_call(sc, "ChangeOwnerByOwnerOnly", args, new BN('0'), setup.pub_keys[1])
+            tx = await sc_call(sc, "ChangeOwnerByOwnerOnly", args, new BN('0'), setup.pub_keys[1]);
             console.log(`\n_eventname after calling ChangeOwnrByOwnerOnly from address that is owner:\n`,
               tx.receipt.event_logs[0]._eventname);
             console.log(`owner field in state after call to ChangeOwnrByOwnerOnly:\n`, state.owner);
+            try { // the safe version of transfering owner owner_ship
+              // call ConfirmOwnershipTransfer before initiating it: will not change owner even if called from owner
+              args = [];
+              tx = await sc_call(sc, "ConfirmOwnershipTransfer", args);
+              console.log(`\n_eventname after calling ConfirmOwnershipTransfer from owner but before Requesting Transfer:\n`,
+                tx.receipt.event_logs[0]._eventname);
+              // current owner to propose address[1] to be new owner
+              args = [ { vname: 'new_owner', type: 'ByStr20',  value: setup.addresses[1] },];
+              tx = await sc_call(sc, "RequestOwnershipTransfer", args);
+              console.log(`\n_eventname after calling RequestOwnershipTransfer from owner proposing address[1] as new owner:\n`,
+                tx.receipt.event_logs[0]._eventname);
+              state = await sc.getState();
+              console.log(`in state of smart contract: field owner = ${state.owner}`);
+              console.log(`    arguments[0] of field pending_owner =`,state.pending_owner.arguments[0]);
+              // Try to confirm owner ship from account[2] which is not the proposed new owner
+              args = [];
+              tx = await sc_call(sc, "ConfirmOwnershipTransfer", args, new BN('0'), setup.pub_keys[2])
+              console.log(`\n_eventname after calling ConfirmOwnershipTransfer from an account that is not the proposed new owner:\n`,
+                tx.receipt.event_logs[0]._eventname);
+              // Confirm owner ship transfer from account[1] which is the proposed new owner
+              args = [];
+              tx = await sc_call(sc, "ConfirmOwnershipTransfer", args, new BN('0'), setup.pub_keys[1])
+              console.log(`\n_eventname after calling ConfirmOwnershipTransfer from account that is the proposed new owner:\n`,
+                tx.receipt.event_logs[0]._eventname);
+              state = await sc.getState();
+              console.log(`in state of smart contract: field owner = ${state.owner}`);
+              console.log(`     constructor of field pending_owner =`,state.pending_owner.constructor);
+
+            } catch (err) { console.log("RequestOwnershipTransfer(.)/ConfirmOwnershipTransfer(.): ERROR\n", err); }
           }
           catch (err) { console.log("ChangeOwnerByOwnerOnly(.): ERROR\n", err); }
         }

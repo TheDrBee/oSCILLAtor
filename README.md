@@ -125,6 +125,15 @@ Script: [Option.js](./js/Option.js).
 ### Ownership
 The [Ownership smart contract](./contracts/Ownership.scilla) shows how a smart contract can have an owner, and how to check if the caller of a transition (the `_sender` of the transaction) is the owner.
 
+It shows two simple ways of how to change the owner 
+- `transition ChangeOwner(new_owner : ByStr20)`: here everybody can change the owner to any address, which is very dangerous and should not be done
+- `transition ChangeOwnerByOwnerOnly(new_owner : ByStr20)`: here only the onwer can change the ownership. This is better, yet still problematic as the `new_owner` might be wrong (a typo is enough...), and thus the contract will have either a wrong owner, or even worse a non-existing owner.
+- The suggested way of transfering ownership, see [Scilla Documentation](https://scilla.readthedocs.io/en/latest/scilla-tips-and-tricks.html#transfer-contract-ownership):
+
+  1. The current owner proposes (stages) a new owner: `transition RequestOwnershipTransfer(new_owner : ByStr20)`
+
+  2. The proposed new owner accepts the owner ship: `transition ConfirmOwnershipTransfer()`
+
 Script: [Ownership.js](./js/Ownership.js).
 
 ### Recursion
