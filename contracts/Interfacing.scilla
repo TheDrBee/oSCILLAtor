@@ -16,12 +16,8 @@ end
 
 (* transition with user defined ADT argument "type Point3D" *)
 transition Point3DTest(p: Point3D)
-  (* extract x, y and z coordinate to show in event *)
-  match p with
-  | Point3D x y z =>
-    ev = {_eventname : "Test"; p: p; x: x; y: y; z: z};
-    event ev
-  end
+  ev = {_eventname : "Point3DTest"; p: p};
+  event ev
 end
 
 (* transition with List argument *)
