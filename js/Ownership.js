@@ -11,8 +11,8 @@ async function run()
   async function call_IsOwnerCalling()
   {
     const tx = await sc_call(sc, "IsOwnerCalling");
-    console.log(`event_logs[0].params[2].value after call to IsOwnerCalling() from account 0:\n`,
-      tx.receipt.event_logs[0].params[2]);
+    console.log(`\nevent_logs[0].params[2].value after call to IsOwnerCalling() from account 0:\n`,
+      tx.receipt.event_logs[0].params[2].value);
   }
 
   let tx = sc = state = null;
@@ -34,21 +34,22 @@ async function run()
         let args = [ { vname: 'new_owner', type: 'ByStr20',  value: new_owner },];
         tx = await sc_call(sc, "ChangeOwner", args);
         state = await sc.getState();
-        console.log(`event_logs[0].params[2] after call to ChangeOwner to ${new_owner}:\n`,
+        console.log(`\nevent_logs[0].params[2] after call to ChangeOwner to ${new_owner}:\n`,
           tx.receipt.event_logs[0].params[2]);
-        console.log(`state after call to ChangeOwner(${new_owner}):\n`, state);
+        console.log(`owner field in state after call to ChangeOwner(${new_owner}):\n`, state.owner);
         try { // call IsOwnerCalling(.) and log emitted events params indicating if caller was the owner
           await call_IsOwnerCalling();
           try {
             // call ChangeOwnrByOwnerOnly from addresses[0] which is not the owner and log the event
             tx = await sc_call(sc, "ChangeOwnerByOwnerOnly", args);
-            console.log(`_eventname after calling ChangeOwnrByOwnerOnly from address that is not owner:\n`,
+            console.log(`\n_eventname after calling ChangeOwnrByOwnerOnly from address that is not owner:\n`,
               tx.receipt.event_logs[0]._eventname);
             // call ChangeOwnrByOwnerOnly from addresses[1] which is the owner and change owner back to address[0]
             args = [ { vname: 'new_owner', type: 'ByStr20',  value: setup.addresses[0] },];
             tx = await sc_call(sc, "ChangeOwnerByOwnerOnly", args, new BN('0'), setup.pub_keys[1])
-            console.log(`_eventname after calling ChangeOwnrByOwnerOnly from address that is owner:\n`,
+            console.log(`\n_eventname after calling ChangeOwnrByOwnerOnly from address that is owner:\n`,
               tx.receipt.event_logs[0]._eventname);
+            console.log(`owner field in state after call to ChangeOwnrByOwnerOnly:\n`, state.owner);
           }
           catch (err) { console.log("ChangeOwnerByOwnerOnly(.): ERROR\n", err); }
         }
