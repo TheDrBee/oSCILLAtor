@@ -12,7 +12,7 @@ async function run_remove()
     console.log(`list in state after call to remove ${val}:`, l);
   }
 
-  let tx = sc = state = null;
+  let tx = sc = state = sst = null;
   try { // deploy the contract
     const init = [ { vname: '_scilla_version', type: 'Uint32', value: '0',}, ];
     [tx, sc] = await deploy_from_file("../contracts/List.scilla", init);
@@ -42,6 +42,25 @@ async function run_remove()
         console.log(` stringified event's params:\n`, JSON.stringify(tx.receipt.event_logs[0].params));
       } catch (err) {
         console.log("Compare123To321(): ERROR\n", err);
+      }
+      tx = await sc_call(sc, "Create123");
+      state = await sc.getState();
+      console.log(`state after call to Create123():`, state);
+      try { // compute 2*list[i] and store in a Map as map[l_i] = 2*l_i, l_i = list[i]
+        tx = await sc_call(sc, "ComputeDoubles");
+        state = await sc.getSubState('doubles');
+        console.log(`doubles in state after call to compute twice the values`, state);
+      } catch (err) {
+        console.log("ComputeDoubles(.): ERROR\n", err);
+      }
+      try { // remove elements with value 1 from a list that is [1,2,1]: result should be [2]
+        tx = await sc_call(sc, "Create121");
+        sst = await sc.getSubState("list");
+        console.log(`list in state after call to Create121():`, sst.list);
+        await remove(1);
+        sst = await sc.getSubState("list");
+      } catch (err) {
+        console.log("RemoveIfEqualtTo(.) for multiple values: ERROR\n",err);
       }
     } catch (err) {
       console.log("Create123(): ERROR\n",err);
