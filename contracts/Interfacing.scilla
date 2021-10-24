@@ -1,13 +1,22 @@
 scilla_version 0
 
 library Interfacing
-type AB = | A | B (* The test ADT *)
+(* user defined ADTs *)
+type AB = | A | B
+type Point3D = (* 3 integer coordinates: (x,y,z) *)
+  | Point3D of Int32 Int32 Int32
 
 contract Interfacing()
 
-(* transition with user defined ADT argument *)
+(* transition with user defined ADT argument "type AB" *)
 transition ABTest(v: AB)
   ev = {_eventname: "ABTest"; value : v};
+  event ev
+end
+
+(* transition with user defined ADT argument "type Point3D" *)
+transition Point3DTest(p: Point3D)
+  ev = {_eventname : "Point3DTest"; p: p};
   event ev
 end
 

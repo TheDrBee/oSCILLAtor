@@ -1,14 +1,17 @@
-(* show how to initialize fields with an init parameter *)
-(* given at deployment. Also show how to check initial  *)
-(* paramters                                            *)
+(* show how to initialize fields with two init parameters   *)
+(* given at deployment. Also shows how to check initial     *)
+(* paramters                                                *)
 scilla_version 0
 
-import IntUtils
+import IntUtils BoolUtils
 
-contract InitiParams(element: Uint32)
-with (* check element < 10 *)
-  let ten = Uint32 10 in
-  uint32_lt element ten
+contract InitiParams(element: Uint32, number: Int32)
+with
+  let ten = Uint32 10 in (* check element < 10 *)
+  let is_el_lt_ten = uint32_lt element ten in
+  let zero = Int32 0 in (* check number is positive *)
+  let is_number_positive = int32_gt number zero in
+  andb is_el_lt_ten is_number_positive (* require both to be true *)
 =>
 
 field list : List Uint32 = (* initialize to [element, 1, 2] *)
@@ -18,3 +21,5 @@ field list : List Uint32 = (* initialize to [element, 1, 2] *)
   let l2 = Cons {Uint32} two nil in (* l2 = [2, nil] = [2] *)
   let l12 = Cons {Uint32} one l2 in (* l12 = [1, l2] = [1, 2] *)
   Cons {Uint32} element l12 (* [element, l12] = [element, 1, 2] *)
+
+field positive_integer : Int32 = number (* only accept number > 0 above! *)

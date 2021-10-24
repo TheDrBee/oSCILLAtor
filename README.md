@@ -63,8 +63,12 @@ Script: [Funds.js](./js/Funds.js).
 ### InitParams
 How to initialize a field at deployment with an init parameter given at deployment. 
 The [InitParams smart contract](./contracts/InitParams.scilla) shows 
-- how to initialize a list not to an empty list (`nil`) but to a list `[element, 1, 2]` where `element` is an init parameter
-- how to check init parameters using `with .... =>` by checking if the given `element` is smaller then 10. If not, the deployment fails.
+- how to initialize 
+
+  i) a simple number with a parameter given at deployment, and 
+
+  ii) a list not to an empty list (`nil`) but to a list `[element, 1, 2]` where `element` is an init parameter
+- how to check init parameters using `with .... =>` by checking if the given `element` is smaller then 10, and if an `Int32 number` is positive. If not, the deployment fails.
 
 Script: [InitParams](./js/InitParams.js).
 
@@ -78,9 +82,10 @@ See also
 
 
 ### Interfacing: Special API calls from JS SDK <a id='interfacing'/>
-The [Script Interfacing.js](./js/Interfacing.js) shows how to call transitions that have more complex types (even user defined ADTs) as argument (in the [Interfacing smart contract](./contracts/ADTInterfacing.scilla)):
+The [Script Interfacing.js](./js/Interfacing.js) shows how to call transitions that have more complex types (even user defined ADTs) as argument (in the [Interfacing smart contract](./contracts/Interfacing.scilla)):
 
-- A user defined ADT needs to be pre-fixed with the contracts address, see the call to `transition ABTest(v: AB)`.
+- The `type` of a user defined ADT needs to be pre-fixed with the contracts address, see the calls to `transition ABTest(v: AB)` and `transition Point3DTest(p: Point3D)`
+- The `value` entry of the argument needs the 3 entries `constructor`, `argtypes` and `arguments`. See the call to `ABTest(v: AB)` for an example where only the `constructor` is non-empty, and the call to `Point3DTest(p: Point3D)` for an example where 3 arguments consists of the 3 (integer) coordinates.
 - A list needs to be an array of the elements, or can be constructed using `Nil` and `Cons`, similar to the way of constructing it in Scilla, see the call to `transition ListTest(list: List String)` which shows this for 2 lists of strings: ["A", "B", "C"] and ["A", "B"]
 - An Option needs to be constructed using `Some` constructor and the value in `arguments`, see the call to `transition OptionTest(option: Option Uint32)` which shows this for an Option ADT holding a Uint32 value.
 - A Pair needs to be constructed using the `Pair` constructor, both types in `argtypes` and the two values in `arguments`, see the call to transition `PairTest(pair: Pair Uint32 String)` which shows this for an example of a pair (1, "Hello").
@@ -122,7 +127,17 @@ The [Option smart contract](./contracts/Option.scilla) shows how to
 Script: [Option.js](./js/Option.js).
 
 ### Ownership
-The [Ownership smart contract](./contracts/Ownership.scilla) shows how a smart contract can have an owner, and how to check if the caller of a transition (the `_sender` of the transaction) is the owner.
+The [Ownership smart contract](./contracts/Ownership.scilla) shows how a smart contract can have an owner, and how to check if the caller of a transition (the `_origin` of the transaction) is the owner.
+
+It shows three ways of how to change the owner of the contract:
+
+- `transition ChangeOwner(new_owner : ByStr20)`: here everybody can change the owner to any address, which is very dangerous and **should not be done**
+- `transition ChangeOwnerByOwnerOnly(new_owner : ByStr20)`: here only the onwer can change the ownership. This is better, yet **still problematic** as the `new_owner` might be wrong (a typo is enough...), and thus the contract will have either a wrong owner, or even worse a non-existing owner.
+- The suggested way of transfering ownership, see [Scilla Documentation](https://scilla.readthedocs.io/en/latest/scilla-tips-and-tricks.html#transfer-contract-ownership) -- **use this in practice**:
+
+  1. The current owner proposes (stages) a new owner: `transition RequestOwnershipTransfer(new_owner : ByStr20)`
+
+  2. The proposed new owner accepts the owner ship: `transition ConfirmOwnershipTransfer()`
 
 Script: [Ownership.js](./js/Ownership.js).
 
