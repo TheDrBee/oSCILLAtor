@@ -28,6 +28,13 @@ let not_equal = fun (a: Uint32) => fun(b: Uint32) =>
   let equal = builtin eq a b in
   negb equal (* from BoolUtils *)
 
+(* utility to remove all elements that equal a value from a lit *)
+let remove_elements_from_list = fun(value: Uint32) => fun(l: List Uint32) =>
+  let f = not_equal value in
+  let filterUint32 = @list_filter Uint32 in (* from ListUtils *)
+  filterUint32 f l
+
+
 contract List()
 
 field list : List Uint32 = empty_list
@@ -57,10 +64,8 @@ end
 
 (* remove elements from list that equal to value *)
 transition RemoveIfEqualtTo(value: Uint32)
-  f = not_equal value;
-  filterUint32 = @list_filter Uint32; (* from ListUtils *)
   l <- list;
-  list_without_values = filterUint32 f l;
+  list_without_values = remove_elements_from_list value l;
   list := list_without_values
 end
 
