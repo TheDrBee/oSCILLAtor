@@ -156,7 +156,12 @@ Script: [RemoteRead.js](./js/RemoteRead.js).
 **Notes**: 
 The first approach is currently not working when using the [IDE](https://ide.zilliqa.com/#/) as the IDE needs to be upgraded to handle address types correctly first. It works, however, when calling the transition using the JS SDK (as in the [script](./js/RemoteRead.js)). The second approach on the other hand works on the IDE but not yet on ceres local server, because ceres still needs to be upgraded to support address type casts.
 
-### SetGet
+### Set and Get
 The [SetGet smart contract](./contracts/SetGet.scilla) shows how to modify a state variable through a transition, and how to emit the value of a state variable in an event.
 
 Script: [SetGet.js](./js/SetGet.js).
+
+### Type function
+The [TypeFunction smart contract](./contracts/TypeFunction.scilla) shows examples how to define type function with 1 or 2 arguments, and how to use them for concrete types, see `tfun: 'T => expr` in the [Scilla documentation](https://scilla.readthedocs.io/en/latest/scilla-in-depth.html#expressions). 
+- `fst` is copied from PairUtils: it extracts the first element of a Pair holding values of two arbitrary types `'A` and `'B` (the parametric types). The transition `StringUint32Pair(.)` shows how to apply it for a Pair holding a first element of type `String` and a second one of type `Uint32` (it returns the `String` element).
+- `list_from_option` constructs a list out of an Option holding one or no value of an arbitrary type. If the option holds a value (of type `'A`, the parametric type), a one element list is returned with this value (of type `'A`). This is shown with an Option holding a `Uint32`. If the option does not hold a value (still of type `'A`, but constructed using `None`), the list returned is empty (but defined to hold elements of type `'A` nevertheless).

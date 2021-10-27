@@ -1,0 +1,78 @@
+scilla_version 0
+
+(*
+  Type functions: how to define and use them
+
+  from Scilla documentation:
+  tfun 'T => expr : A type function that takes 'T as a parametric type
+  and returns the value to which expression expr evaluates.
+
+  Note: a type function can have more than one parametric type
+*)
+
+library TypeFunction
+
+(* first  element in a Pair (a,b)         *)
+(* a is of type A, b of type B            *)
+(* copied here from PairUtils library     *)
+let fst =
+  tfun 'A => (* a is of type A *)
+  tfun 'B => (* b is of type B *)
+  fun (p : Pair ('A) ('B)) =>
+    match p with
+    | Pair a b => a
+    end
+
+(* Build a list out of an Option holding    *)
+(* a value of any type (or None)            *)
+(* if the Option has a value, a one-element *)
+(* list with that value is built, otherwise *)
+(* an empty list                            *)
+let list_from_option =
+  tfun 'A =>
+  fun(op: Option ('A)) =>
+    let empty_list = Nil {'A} in
+    match op with
+    | None => (* Option has no value *)
+      empty_list
+    | Some value => (* Option has a value *)
+      Cons {'A} value empty_list
+    end
+
+
+contract TypeFunction
+()
+
+(* call the library function fst with types 'A=String, 'B=Uint32 *)
+transition StringUint32Pair()
+  (* create a Pair for testing *)
+  p = (* p = (a_string, b_num = ("Hello", 13) *)
+    let a_string = "Hello" in
+    let b_num = Uint32 13 in
+    Pair {String Uint32} a_string b_num;
+  (* call the t fun fst with A'=String, B'=Uint32 *)
+  result =
+    let first_el = @fst String Uint32 in
+    first_el p;
+  ev = {_eventname : "StringUint32Pair"; first_el : result};
+  event ev
+end
+
+(* call the library function list_from_option twice:            *)
+(*  1) with type 'A = Uint32 and an Option holding value 1      *)
+(*      ==> returns a list [1] (elements of type Uint32)        *)
+(*  2) with type 'A = Bool with an Option not holding a value   *)
+(*      ==> returns an empty list [] (elements of type Bool)    *)
+transition ListFromOption()
+  option1 = let one = Uint32 1 in
+    Some {Uint32} one;
+  list1 = let lUint32 = @list_from_option Uint32 in
+    lUint32 option1;
+  option2 = None {Bool};
+  list2 = let lBool = @list_from_option Bool in
+    lBool option2;
+  ev = {_eventname: "ListFromOption";
+    option_Uint32: option1; list_Uint32: list1;
+    opton_Bool: option2; list_bool: list2};
+  event ev
+end
