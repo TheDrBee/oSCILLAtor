@@ -26,6 +26,8 @@ This also shows application of the builtin ADT [Pair](https://scilla.readthedocs
 
 2. The [Script Interfacing.js](./js/Interfacing.js) shows how to call transitions that have built in and user defined ADTs as argument, i.e. how to create the 'args' in JS, see [Interfacing below](#interfacing).
 
+See also the [AdtMap smart contract](./contracts/AdtMap.scilla) for another example of a user defined ADT.
+
 ### AdtMap
 How to create a map storing user defined algebraic data types (ADTs):
 The [AdtMap smart contract](./contracts/AdtMap.scilla) defines an ADT `Player` which consists of the age and a sport, either Tennis or Run. It has transitions to
