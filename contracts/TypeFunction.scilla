@@ -73,6 +73,6 @@ transition ListFromOption()
     lBool option2;
   ev = {_eventname: "ListFromOption";
     option_Uint32: option1; list_Uint32: list1;
-    opton_Bool: option2; list_bool: list2};
+    option_Bool: option2; list_bool: list2};
   event ev
 end
