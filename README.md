@@ -104,6 +104,7 @@ The [List smart contract](./contracts/List.scilla) shows list manipulations and 
 See also 
 - [InitParams smart contract](./contracts/InitParams.scilla) on how to initialize a list that is a field using a parameter at deployment.
 - [Recursion smart contract](./contracts/Recursion.scilla) on how to build a list [m, m+1, ..., n-1] for parameters `m` and `n`.
+- [AMap smart contract](./contracts/AMap.scilla) on how to use `@list_foldl` to sum up elements in a list.
 
 Script: [List.js](./js/List.js).
 
