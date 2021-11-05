@@ -107,6 +107,14 @@ See also
 
 Script: [List.js](./js/List.js).
 
+### Map
+The [AMap smart contract](./contracts/AMap.scilla) shows operations that are less known on `Map' type. 
+- How to work with a map that is not a field by using [Functional Map Operations](https://scilla.readthedocs.io/en/latest/scilla-in-depth.html#functional-map-operations) to build it using `builtin put`
+- How to convert a `Map` to a `List` of key-value-pairs and then use list operations. The example shows how to sum all the integer type keys of a map, see the `transition SumOfKeys()`.
+
+Script: [AMap.js](./js/AMap.js).
+
+
 ### Nat Type 
 The [NatType smart contract](./contracts/NatType.scilla) shows an example for the builtin ADT `Nat`. It implements a counter that can be increased and decreased, but is floored at 0. The 'Nat' type is an implementation of the "Peano numbers" and "Peano Axioms" that lead to the natural numbers 0, 1, 2, ...
 The examples show how to 

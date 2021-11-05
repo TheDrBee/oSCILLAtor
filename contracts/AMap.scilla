@@ -1,0 +1,42 @@
+scilla_version 0
+(* operations on maps *)
+
+import PairUtils
+
+library AMap
+
+(* sum the integer type keys in a map *)
+let sum_keys = fun(m: Map Uint32 String) =>
+  (* create a list of (key,values) pairs of the map *)
+  let l = builtin to_list m in
+  (* use fold to sum up the first elements of all pairs *)
+  let folder = @list_foldl (Pair Uint32 String) Uint32 in
+  let init = Uint32 0 in (* initialize the accumulator at 0 *)
+  let addition = (* add elements to accumulator: extract first element of Pair and add *)
+    fun(acc: Uint32) =>
+    fun(pair: Pair Uint32 String) =>
+      let the_int = @fst Uint32 String in (* get the int *)
+      let int = the_int pair in
+      builtin add acc int in (* add int to accumulator *)
+    folder addition init l (* apply to entire list of pairs *)
+
+contract AMap()
+
+(* Test the summation of integer type keys in a map *)
+transition SumOfKeys()
+  (* create map Uint32->String for testing
+        m[4] = "Hello",
+        m[19] = "World"        *)
+  map =
+    let m0 = Emp Uint32 String in
+    let k0 = Uint32 4 in
+    let v0 = "Hello" in
+    let k1 = Uint32 19 in
+    let v1 = "World" in
+    let m1 = builtin put m0 k0 v0 in
+  builtin put m1 k1 v1;
+  (* sum up all keys and emit result *)
+  result = sum_keys map;
+  ev = {_eventname: "SumOfKeys"; sum_of_keys: result};
+  event ev
+end
