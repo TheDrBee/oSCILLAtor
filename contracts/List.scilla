@@ -8,9 +8,10 @@ library List
 
 let empty_list = Nil {Uint32}
 
-let one   = Uint32 1 (* numbers 1, 2 and 3 to use below *)
+let one   = Uint32 1 (* numbers 1, 2, 3 and 4 to use below *)
 let two   = Uint32 2
 let three = Uint32 3
+let four = Uint32 4
 
 let create_3el_list = (* utility to create a list with 3 elements *)
   fun (e1 : Uint32) =>
@@ -33,6 +34,28 @@ let remove_elements_from_list = fun(value: Uint32) => fun(l: List Uint32) =>
   let f = not_equal value in
   let filterUint32 = @list_filter Uint32 in (* from ListUtils *)
   filterUint32 f l
+
+(* check if two list l1 and l2 have no common elements:         *)
+(* for each element in the first list, we check if it exists    *)
+(* in the second list. If any such element exists, we return    *)
+(* False (not disjunct) otherwise we return True                *)
+
+(* return true if l[i] != value for all elements l[i] in the list l *)
+let all_elements_different_from_value =
+  fun(l: List Uint32) =>
+  fun(value: Uint32) =>
+    let f = not_equal value in
+    let for_allUint32 = @list_forall Uint32 in (* from ListUtiles *)
+    for_allUint32 f l (* checks if all elements are NOT equal to value *)
+
+(* return true if no element in l1 is also in l2, or, put differently,  *)
+(* check for each element in l1 if all elements in l2 are different     *)
+let are_lists_disjunct =
+  fun(l1: List Uint32) =>
+  fun(l2: List Uint32) =>
+    let f = all_elements_different_from_value l2 in (* apply above expression to l2 *)
+    let for_allUint32 = @list_forall Uint32 in
+    for_allUint32 f l1 (* apply now this f to l1 *)
 
 
 contract List()
@@ -118,5 +141,40 @@ transition SumElements112()
         builtin add a b in
     folder addition init l;
   ev = {_eventname: "SumElements112"; sum: sum_of_elements};
+  event ev
+end
+
+(* check if two lists l1 and l2 have at least one common element  *)
+(* if they have, they are not disjunct                            *)
+transition AreListsDisjunct()
+  (* create a few lists for testing *)
+  l1 = Cons {Uint32} one empty_list;      (* [1] *)
+  l2 = Cons {Uint32} two empty_list;      (* [2] *)
+  l32 = Cons {Uint32} three l2;           (* [3,2] *)
+  l41 = Cons {Uint32} four l1;            (* [4,1] *)
+  l111 = create_3el_list one one one;     (* [1,1,1] *)
+  l131 = create_3el_list one three one;   (* [1,3,1] *)
+  l243 = create_3el_list two four three;  (* [2,4,2] *)
+  (* apply are_lists_disjunct to some pair of the lists *)
+  check_1_2 = are_lists_disjunct l1 l2;         (* True *)
+  check_1_32 = are_lists_disjunct l1 l32;       (* True *)
+  check_2_32 = are_lists_disjunct l2 l32;       (* False *)
+  check_32_41 = are_lists_disjunct l32 l41;     (* True *)
+  check_1_111 = are_lists_disjunct l1 l111;     (* False *)
+  check_111_2 = are_lists_disjunct l111 l2;     (* True *)
+  check_32_111 = are_lists_disjunct l32 l111;   (* True *)
+  check_111_131 = are_lists_disjunct l111 l131; (* False *)
+  check_111_243 = are_lists_disjunct l111 l243; (* True *)
+  ev = {_eventname: "AreListsDisjunct";
+        check_1_2: check_1_2;
+        check_1_32: check_1_32;
+        check_2_32: check_2_32;
+        check_32_41: check_32_41;
+        check_1_111: check_1_111;
+        check_111_2: check_111_2;
+        check_32_111: check_32_111;
+        check_111_131: check_111_131;
+        check_111_243: check_111_243
+  };
   event ev
 end

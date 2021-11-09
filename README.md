@@ -102,6 +102,7 @@ The [List smart contract](./contracts/List.scilla) shows list manipulations and 
 - compare two lists and create a list of booleans applying `list_zip_with`, see `Compare123To321()`
 - apply a procedure to compute twice the value of each element and store the result in a map (m[l_i] = 2*l_i) applying `forall`, see `ComputeDoubles()`
 - compute the sum of all elements in a list applying a left fold (`list_foldl`), see `SumElements112()`
+- check if two lists are disjunct, i.e. have no common element(s): This applies `list_forall` twice, by checking for each element in the first list if it is different to all values in a second list, see `are_lists_disjunct` and the transition `AreListsDisjunct()` which tests this for a few lists.
 
 See also 
 - [InitParams smart contract](./contracts/InitParams.scilla) on how to initialize a list that is a field using a parameter at deployment.
