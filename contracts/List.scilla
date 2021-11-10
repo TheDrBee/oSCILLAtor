@@ -73,6 +73,18 @@ let count_in_list =
     let folder = @list_foldl Uint32 Uint32 in
     folder f init l
 
+(* check if all elements in a list are unique                               *)
+(* we apply above counter to each element and check if it is exactly 1      *)
+(* if it is bigger than 1 for an element we are done and the result is fale *)
+let is_unique =
+  fun(l: List Uint32) =>
+    let f = fun(value: Uint32) =>
+      let num = count_in_list l value in
+      builtin eq num one in
+    let for_allUint32 = @list_forall Uint32 in
+    for_allUint32 f l (* apply now this f to l1 *)
+
+
 contract List()
 
 field list : List Uint32 = empty_list
@@ -180,6 +192,7 @@ transition AreListsDisjunct()
   check_32_111    = are_lists_disjunct l32 l111;   (* True *)
   check_111_131   = are_lists_disjunct l111 l131; (* False *)
   check_111_243   = are_lists_disjunct l111 l243; (* True *)
+  (* emit results *)
   ev = {_eventname: "AreListsDisjunct";
         check_1_2: check_1_2;
         check_1_32: check_1_32;
@@ -205,6 +218,7 @@ transition Count()
   check_1_in_243  = count_in_list l243 one; (* 0 *)
   check_1_in_131  = count_in_list l131 one; (* 2 *)
   check_1_in_111  = count_in_list l111 one; (* 3 *)
+  (* emit results *)
   ev = {_eventname: "Count";
         check_1_in_empty: check_1_in_empty;
         check_1_in_243: check_1_in_243;
@@ -214,4 +228,25 @@ transition Count()
   event ev
 end
 
-  
+transition CheckUniqueness()
+  (* create a few lists for testing *)
+  l1 = Cons {Uint32} one empty_list;      (* [1] *)
+  l123 = create_3el_list one two three;   (* [1,2,3] *)
+  l131 = create_3el_list one three one;   (* [1,3,1] *)
+  l311 = create_3el_list three one one;   (* [3,1,1] *)
+  (* apply is_uniqe to some lists *)
+  chk_empty = is_unique empty_list; (* true *)
+  chk_1     = is_unique l1;         (* true *)
+  chk_123   = is_unique l123;       (* true *)
+  chk_131   = is_unique l131;       (* false *)
+  chk_311   = is_unique l311;       (* false *)
+  (* emit results *)
+  ev = {_eventname: "CheckUniqueness";
+        chk_empty: chk_empty;
+        chk_1: chk_1;
+        chk_123: chk_123;
+        chk_131: chk_131;
+        chk_311: chk_311
+  };
+  event ev
+end
