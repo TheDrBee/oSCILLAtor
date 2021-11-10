@@ -103,6 +103,8 @@ The [List smart contract](./contracts/List.scilla) shows list manipulations and 
 - apply a procedure to compute twice the value of each element and store the result in a map (m[l_i] = 2*l_i) applying `forall`, see `ComputeDoubles()`
 - compute the sum of all elements in a list applying a left fold (`list_foldl`), see `SumElements112()`
 - check if two lists are disjunct, i.e. have no common element(s): This applies `list_forall` twice, by checking for each element in the first list if it is different to all values in a second list, see `are_lists_disjunct` and the transition `AreListsDisjunct()` which tests this for a few lists.
+- count the number of occurences of a value in a list: This applies a left fold `list_foldl` to a list where the accumulator is increased by one if an element of the list matches a given value (and remains equal if not). See `count_in_list` and the tranition `Count(.)` which tests this by counting how many 1's there are in a few lists.
+
 
 See also 
 - [InitParams smart contract](./contracts/InitParams.scilla) on how to initialize a list that is a field using a parameter at deployment.

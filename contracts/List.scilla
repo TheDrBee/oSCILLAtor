@@ -58,6 +58,21 @@ let are_lists_disjunct =
     for_allUint32 f l1 (* apply now this f to l1 *)
 
 
+(* count the number of occurences of a value in a list *)
+let count_in_list =
+  fun(l: List Uint32) =>
+  fun(value: Uint32) =>
+    let f = (* increase accumulator if element equals value *)
+      fun(acc: Uint32) => fun(element: Uint32) =>
+      let equal = builtin eq value element in
+      match equal with
+      | False => acc
+      | True => builtin add acc one
+      end in
+    let init = Uint32 0 in (* initial value of accumulator *)
+    let folder = @list_foldl Uint32 Uint32 in
+    folder f init l
+
 contract List()
 
 field list : List Uint32 = empty_list
@@ -154,17 +169,17 @@ transition AreListsDisjunct()
   l41 = Cons {Uint32} four l1;            (* [4,1] *)
   l111 = create_3el_list one one one;     (* [1,1,1] *)
   l131 = create_3el_list one three one;   (* [1,3,1] *)
-  l243 = create_3el_list two four three;  (* [2,4,2] *)
+  l243 = create_3el_list two four three;  (* [2,4,3] *)
   (* apply are_lists_disjunct to some pair of the lists *)
-  check_1_2 = are_lists_disjunct l1 l2;         (* True *)
-  check_1_32 = are_lists_disjunct l1 l32;       (* True *)
-  check_2_32 = are_lists_disjunct l2 l32;       (* False *)
-  check_32_41 = are_lists_disjunct l32 l41;     (* True *)
-  check_1_111 = are_lists_disjunct l1 l111;     (* False *)
-  check_111_2 = are_lists_disjunct l111 l2;     (* True *)
-  check_32_111 = are_lists_disjunct l32 l111;   (* True *)
-  check_111_131 = are_lists_disjunct l111 l131; (* False *)
-  check_111_243 = are_lists_disjunct l111 l243; (* True *)
+  check_1_2       = are_lists_disjunct l1 l2;         (* True *)
+  check_1_32      = are_lists_disjunct l1 l32;       (* True *)
+  check_2_32      = are_lists_disjunct l2 l32;       (* False *)
+  check_32_41     = are_lists_disjunct l32 l41;     (* True *)
+  check_1_111     = are_lists_disjunct l1 l111;     (* False *)
+  check_111_2     = are_lists_disjunct l111 l2;     (* True *)
+  check_32_111    = are_lists_disjunct l32 l111;   (* True *)
+  check_111_131   = are_lists_disjunct l111 l131; (* False *)
+  check_111_243   = are_lists_disjunct l111 l243; (* True *)
   ev = {_eventname: "AreListsDisjunct";
         check_1_2: check_1_2;
         check_1_32: check_1_32;
@@ -178,3 +193,25 @@ transition AreListsDisjunct()
   };
   event ev
 end
+
+(* count the number of occurences of a value in a list *)
+transition Count()
+  (* create a few lists for testing *)
+  l111 = create_3el_list one one one;     (* [1,1,1] *)
+  l131 = create_3el_list one three one;   (* [1,3,1] *)
+  l243 = create_3el_list two four three;  (* [2,4,3] *)
+  (* apply count_in_list to some value and the test lists *)
+  check_1_in_empty= count_in_list empty_list one; (* 0 *)
+  check_1_in_243  = count_in_list l243 one; (* 0 *)
+  check_1_in_131  = count_in_list l131 one; (* 2 *)
+  check_1_in_111  = count_in_list l111 one; (* 3 *)
+  ev = {_eventname: "Count";
+        check_1_in_empty: check_1_in_empty;
+        check_1_in_243: check_1_in_243;
+        check_1_in_131: check_1_in_131;
+        check_1_in_111: check_1_in_111
+  };
+  event ev
+end
+
+  
