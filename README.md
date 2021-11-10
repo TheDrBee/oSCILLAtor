@@ -19,9 +19,9 @@ In order to run the JS scripts install [ceres](https://github.com/Zilliqa/ceres/
 How to define and use (user defined) algebraic data types (ADTs), and how to call transitions using the JS lib with ADT arguments:
 
 1. The [Adt smart contract](./contracts/Adt.scilla) defines and ADT `Item` which can be a shirt or a barbell. An Item has a weight (a `Uint32`). Then, an
-ADT `Parcel` is defined that consists of either one or two Items. The Items must not necessarily be of the same type, so a Parcel can contain a shirt and a barbell, for example. 
-Depending on the (total) weight of the contents of a Parcel (the weight of the item(s) it contains) the shipping cost is computed. Finally, the Parcel is stored 
-together with its shipping cost in a list. 
+ADT `Parcel` is defined that consists of either one or two Items. The Items must not necessarily be of the same type, so a Parcel can contain a shirt and a barbell, for example.
+Depending on the (total) weight of the contents of a Parcel (the weight of the item(s) it contains) the shipping cost is computed. Finally, the Parcel is stored
+together with its shipping cost in a list.
 This also shows application of the builtin ADT [Pair](https://scilla.readthedocs.io/en/latest/scilla-in-depth.html#pair): The list entries are `Pair {Parcel Uint32}`, i.e., pairs (parcel, shipping cost).
 
 2. The [Script Interfacing.js](./js/Interfacing.js) shows how to call transitions that have built in and user defined ADTs as argument, i.e. how to create the 'args' in JS, see [Interfacing below](#interfacing).
@@ -63,11 +63,11 @@ The [Funds smart contract](./contracts/Funds.scilla) offers transitions to
 Script: [Funds.js](./js/Funds.js).
 
 ### InitParams
-How to initialize a field at deployment with an init parameter given at deployment. 
-The [InitParams smart contract](./contracts/InitParams.scilla) shows 
-- how to initialize 
+How to initialize a field at deployment with an init parameter given at deployment.
+The [InitParams smart contract](./contracts/InitParams.scilla) shows
+- how to initialize
 
-  i) a simple number with a parameter given at deployment, and 
+  i) a simple number with a parameter given at deployment, and
 
   ii) a list not to an empty list (`nil`) but to a list `[element, 1, 2]` where `element` is an init parameter
 - how to check init parameters using `with .... =>` by checking if the given `element` is smaller then 10, and if an `Int32 number` is positive. If not, the deployment fails.
@@ -79,7 +79,7 @@ Script: [InitParams](./js/InitParams.js).
 The [Integer smart contract](./contracts/Integers.scilla) shows operations on integer types:
 - how to compare using [IntUtils library](https://scilla.readthedocs.io/en/latest/scilla-in-depth.html#intutils)
 
-See also 
+See also
 - [InitParams smart contract](./contracts/InitParams.scilla) on how to compare integers at deployment.
 
 
@@ -92,7 +92,7 @@ The [Script Interfacing.js](./js/Interfacing.js) shows how to call transitions t
 - An Option needs to be constructed using `Some` constructor and the value in `arguments`, see the call to `transition OptionTest(option: Option Uint32)` which shows this for an Option ADT holding a Uint32 value.
 - A Pair needs to be constructed using the `Pair` constructor, both types in `argtypes` and the two values in `arguments`, see the call to transition `PairTest(pair: Pair Uint32 String)` which shows this for an example of a pair (1, "Hello").
 - A Bool needs to be constructed using the `True` or `False` constructor (with empty `arguments`), see the call to transition `BoolTest(bool: Bool)` which shows this for `True`.
- 
+
 ### List
 The [List smart contract](./contracts/List.scilla) shows list manipulations and use cases of the library `ListUtils`. It shows application of predicates and curried functions:
 - construct a list using `Nil` and `Cons`: `Create123()`
@@ -107,7 +107,7 @@ The [List smart contract](./contracts/List.scilla) shows list manipulations and 
 - check if a list is "unique" in the sense that each element of it is unique (i.e., it's only once in the list). This applies above `count_in_list` using a `list_for_all` to each element of the same list (and checks the result of each count against 1). See `is_unique` and the transition `CheckUniqueness` which tests this for a few lists.
 
 
-See also 
+See also
 - [InitParams smart contract](./contracts/InitParams.scilla) on how to initialize a list that is a field using a parameter at deployment.
 - [Recursion smart contract](./contracts/Recursion.scilla) on how to build a list [m, m+1, ..., n-1] for parameters `m` and `n`.
 - [AMap smart contract](./contracts/AMap.scilla) on how to use `@list_foldl` to sum up elements in a list.
@@ -115,16 +115,16 @@ See also
 Script: [List.js](./js/List.js).
 
 ### Map
-The [AMap smart contract](./contracts/AMap.scilla) shows operations that are less known on `Map' type. 
+The [AMap smart contract](./contracts/AMap.scilla) shows operations that are less known on `Map' type.
 - How to work with a map that is not a field by using [Functional Map Operations](https://scilla.readthedocs.io/en/latest/scilla-in-depth.html#functional-map-operations) to build it using `builtin put`
 - How to convert a `Map` to a `List` of key-value-pairs and then use list operations. The example shows how to sum all the integer type keys of a map, see the `transition SumOfKeys()`.
 
 Script: [AMap.js](./js/AMap.js).
 
 
-### Nat Type 
+### Nat Type
 The [NatType smart contract](./contracts/NatType.scilla) shows an example for the builtin ADT `Nat`. It implements a counter that can be increased and decreased, but is floored at 0. The 'Nat' type is an implementation of the "Peano numbers" and "Peano Axioms" that lead to the natural numbers 0, 1, 2, ...
-The examples show how to 
+The examples show how to
 - get the first Peano number `Zero` by initializing the `field counter` to it
 - get the next Peano number using `Succ` (see `transition Increase()`)
 - get the previous Peano number using `nat_prev` from `NatUtils` (note that 0 has no precessor), see `transition DecreaseFlooredAtZero()`
@@ -157,18 +157,18 @@ It shows three ways of how to change the owner of the contract:
 Script: [Ownership.js](./js/Ownership.js).
 
 ### Recursion
-The [Recursion smart contract](./contracts/Recursion.scilla) shows how to use recursion in Scilla. 
+The [Recursion smart contract](./contracts/Recursion.scilla) shows how to use recursion in Scilla.
 - create a list [m, m+1, ..., n-1] where `m` and `n` are inputs, see `transition CreateList(m : Uint32, n : Uint32)`
 - compute the factorial of `n`: n! = 1 if n=0 and else n! = n*(n-1)*...*1, see `transition Factorial(n: Uint32)`
 
 ### Remote State Read
-The [RemoteRead smart contract](./contracts/RemoteRead.scilla) shows how to read a field from a diffrent contract deployed on the chain: 
+The [RemoteRead smart contract](./contracts/RemoteRead.scilla) shows how to read a field from a diffrent contract deployed on the chain:
 - The transition `ReadValueFromSetGet(.)` reads the field `value` from the smart contract [SetGet](./contracts/SetGet.scilla), see below. It defines the transition parameter `c` (the contract's address) as an address with a type of a contract with a field "value" of type "Uint128": `transition ReadValueFromSetGet(c: ByStr20 with contract field value: Uint128 end)`
 - The transition `ReadValueFromSetGet2(.)` uses a different approach to achieve the same purpose: instead of defining the transition parameter as a typed address, it does an address type cast inside the transition using the keyword `as` to be able to then read a field from that address: `contract_opt <- &addr as ByStr20 with contract field value: Uint128 end;`
 
 Script: [RemoteRead.js](./js/RemoteRead.js).
 
-**Notes**: 
+**Notes**:
 The first approach is currently not working when using the [IDE](https://ide.zilliqa.com/#/) as the IDE needs to be upgraded to handle address types correctly first. It works, however, when calling the transition using the JS SDK (as in the [script](./js/RemoteRead.js)). The second approach on the other hand works on the IDE but not yet on ceres local server, because ceres still needs to be upgraded to support address type casts.
 
 ### Set and Get
@@ -177,6 +177,6 @@ The [SetGet smart contract](./contracts/SetGet.scilla) shows how to modify a sta
 Script: [SetGet.js](./js/SetGet.js).
 
 ### Type function
-The [TypeFunction smart contract](./contracts/TypeFunction.scilla) shows examples how to define type function with 1 or 2 arguments, and how to use them for concrete types, see `tfun: 'T => expr` in the [Scilla documentation](https://scilla.readthedocs.io/en/latest/scilla-in-depth.html#expressions). 
+The [TypeFunction smart contract](./contracts/TypeFunction.scilla) shows examples how to define type function with 1 or 2 arguments, and how to use them for concrete types, see `tfun: 'T => expr` in the [Scilla documentation](https://scilla.readthedocs.io/en/latest/scilla-in-depth.html#expressions).
 - `fst` is copied from PairUtils: it extracts the first element of a Pair holding values of two arbitrary types `'A` and `'B` (the parametric types). The transition `StringUint32Pair(.)` shows how to apply it for a Pair holding a first element of type `String` and a second one of type `Uint32` (it returns the `String` element).
 - `list_from_option` constructs a list out of an Option holding one or no value of an arbitrary type. If the option holds a value (of type `'A`, the parametric type), a one element list is returned with this value (of type `'A`). This is shown with an Option holding a `Uint32`. If the option does not hold a value (still of type `'A`, but constructed using `None`), the list returned is empty (but defined to hold elements of type `'A` nevertheless).
