@@ -86,12 +86,17 @@ See also
 ### Interfacing: Special API calls from JS SDK <a id='interfacing'/>
 The [Script Interfacing.js](./js/Interfacing.js) shows how to call transitions that have more complex types (even user defined ADTs) as argument (in the [Interfacing smart contract](./contracts/Interfacing.scilla)):
 
-- The `type` of a user defined ADT needs to be pre-fixed with the contracts address, see the calls to `transition ABTest(v: AB)` and `transition Point3DTest(p: Point3D)`
-- The `value` entry of the argument needs the 3 entries `constructor`, `argtypes` and `arguments`. See the call to `ABTest(v: AB)` for an example where only the `constructor` is non-empty, and the call to `Point3DTest(p: Point3D)` for an example where 3 arguments consists of the 3 (integer) coordinates.
-- A list needs to be an array of the elements, or can be constructed using `Nil` and `Cons`, similar to the way of constructing it in Scilla, see the call to `transition ListTest(list: List String)` which shows this for 2 lists of strings: ["A", "B", "C"] and ["A", "B"]
-- An Option needs to be constructed using `Some` constructor and the value in `arguments`, see the call to `transition OptionTest(option: Option Uint32)` which shows this for an Option ADT holding a Uint32 value.
-- A Pair needs to be constructed using the `Pair` constructor, both types in `argtypes` and the two values in `arguments`, see the call to transition `PairTest(pair: Pair Uint32 String)` which shows this for an example of a pair (1, "Hello").
 - A Bool needs to be constructed using the `True` or `False` constructor (with empty `arguments`), see the call to transition `BoolTest(bool: Bool)` which shows this for `True`.
+
+- An Option needs to be constructed using `Some` constructor and the value in `arguments`, see the call to `transition OptionTest(option: Option Uint32)` which shows this for an Option ADT holding a Uint32 value.
+
+- A Pair needs to be constructed using the `Pair` constructor, both types in `argtypes` and the two values in `arguments`, see the call to transition `PairTest(pair: Pair Uint32 String)` which shows this for an example of a pair (1, "Hello").
+
+- A list needs to be an array of the elements, or can be constructed using `Nil` and `Cons`, similar to the way of constructing it in Scilla, see the call to `transition ListTest(list: List String)` which shows this for 2 lists of strings: ["A", "B", "C"] and ["A", "B"]
+
+- The `type` of a user defined ADT needs to be pre-fixed with the contracts address, see the calls to `transition ABTest(v: AB)` and `transition Point3DTest(p: Point3D)`
+The `value` entry of the argument needs the 3 entries `constructor`, `argtypes` and `arguments`. See the call to `ABTest(v: AB)` for an example where only the `constructor` is non-empty, and the call to `Point3DTest(p: Point3D)` for an example where 3 arguments consists of the 3 (integer) coordinates.
+
 
 ### List
 The [List smart contract](./contracts/List.scilla) shows list manipulations and use cases of the library `ListUtils`. It shows application of predicates and curried functions:
