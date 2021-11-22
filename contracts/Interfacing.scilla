@@ -32,6 +32,12 @@ transition ListTest(list: List String)
   event ev
 end
 
+(* transition with a List of Pairs (Uint32, String) argument *)
+transition ListOfPairsTest(list: List (Pair Uint32 String) )
+  ev = {_eventname: "ListOfPairsTest"; list: list};
+  event ev
+end
+
 (* transition with user defined ADT argument "type AB" *)
 transition ABTest(v: AB)
   ev = {_eventname: "ABTest"; value : v};

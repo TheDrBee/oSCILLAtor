@@ -64,6 +64,25 @@ async function run()
 
             console.log("  .. ListTest (general way): tx.receipt.event_logs[0].params:\n", tx.receipt.event_logs[0].params);
 
+            // call ListOfPairsTest with a 1 element list of a pair [(1,"Hello")
+            // Note the parenthesis needed in the type entry of the arguments
+            args = [
+              {
+                vname: 'list',
+                type: 'List( Pair Uint32 String )',
+                value: [ // a list of 2 pairs as value 
+                  { constructor: 'Pair', argtypes: ['Uint32', 'String'], arguments: ['1', 'Hello']},
+                  { constructor: 'Pair', argtypes: ['Uint32', 'String'], arguments: ['2', 'ByeBye']},
+                ]
+              },
+            ];
+            tx = await sc_call(sc, "ListOfPairsTest", args);
+            console.log(tx.receipt);
+
+
+            console.log("\n  .. ListOfPairsTest: tx.receipt.event_logs[0].params:\n", tx.receipt.event_logs[0].params);
+            console.log("\n                    : tx.receipt.event_logs[0].params[0].value:\n", tx.receipt.event_logs[0].params[0].value);
+
             // User defined ADTs: AB and Point3D
             try { // call transition ABTest
               // Note the special type and value for a user defined ADT (AB here)
@@ -90,13 +109,13 @@ async function run()
                 console.log("\n  .. Point3DTest: tx.receipt.event_logs[0].params.value:\n", tx.receipt.event_logs[0].params[0].value);
               }
               catch (err) { console.log("Point3DTest(.): ERROR\n",err); }
-            }
-            catch (err) { console.log("ABTest(.): ERROR\n",err); }
           }
-          catch (err) { console.log("ListTest(.): Error\n", err); }
+          catch (err) { console.log("ABTest(.): ERROR\n",err); }
         }
-        catch (err) { console.log("PairTest(.): Error\n", err); }
+        catch (err) { console.log("ListTest(.): Error\n", err); }
       }
+      catch (err) { console.log("PairTest(.): Error\n", err); }
+    }
       catch (err) { console.log("OptionTest(.): Error\n", err); }
     }
     catch (err) { console.log("BoolTest(.): Error\n", err); }
