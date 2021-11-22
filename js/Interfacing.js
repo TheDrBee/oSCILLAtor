@@ -71,7 +71,7 @@ async function run()
             console.log("  .. OptionTest: tx.receipt.event_logs[0].params.value:\n", tx.receipt.event_logs[0].params[0].value);
 
             try { // call transition PairTest with a Pair Uint32 String that has value (1, "Hello")
-              // Note how to create the argument for the pair and the parenthesis needed aroung the types of its engries (Uint32 and String)
+              // Note how to create the argument for the pair and the parenthesis needed aroung the types of its entries (Uint32 and String)
               args = [ {vname: 'pair', type: 'Pair (Uint32) (String)', value: {constructor: 'Pair', argtypes: ['Uint32', 'String'], arguments: ['1', 'Hello']}}, ];
               tx = await sc_call(sc, "PairTest", args);
 
