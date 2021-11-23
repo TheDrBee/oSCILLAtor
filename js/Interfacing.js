@@ -1,10 +1,6 @@
-/* Interfacing with transitions taking ADTs:
-  - a user defined ADT: needs format contract_address.type
-  - a List: can use the format ["A", "B", "C"] or need to build the list using Nil and Cons, similar to scilla
-  - an Option type: use constructor "Some" or "None"
-  - a Pair type: define the argtype as 'Pair (Type1) (Type2)'
-  - a Boolean type: use constructor 'True' or 'False'
-*/
+/* Interfacing with transitions taking ADTs as arguments: 
+     both builtin ADTs and user defined ones */
+
 const {
   setup,
   deploy_from_file,

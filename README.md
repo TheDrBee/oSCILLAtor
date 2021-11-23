@@ -94,8 +94,8 @@ The [Script Interfacing.js](./js/Interfacing.js) shows how to call transitions t
 
 - A list needs to be an array of the elements, or can be constructed using `Nil` and `Cons`, similar to the way of constructing it in Scilla, see the call to `transition ListTest(list: List String)` which shows this for 2 lists of strings: ["A", "B", "C"] and ["A", "B"]. We also show how to construct the arguments to call a transition that has an argument that is a list of pairs, i.e., [(1,"Hello"), (2, "ByeBye")], see the call to `transition ListOfPairsTest`.
 
-- The `type` of a user defined ADT needs to be pre-fixed with the contracts address, see the calls to `transition ABTest(v: AB)` and `transition Point3DTest(p: Point3D)`
-The `value` entry of the argument needs the 3 entries `constructor`, `argtypes` and `arguments`. See the call to `ABTest(v: AB)` for an example where only the `constructor` is non-empty, and the call to `Point3DTest(p: Point3D)` for an example where 3 arguments consists of the 3 (integer) coordinates.
+- The `type` of a user defined ADT needs to be pre-fixed with the contracts address, see the calls to `transition ABTest(v: AB)` and `transition Point3DTest(p: Point3D)`.
+The `value` entry of the argument needs the 3 entries `constructor`, `argtypes` and `arguments`. See the call to `ABTest(v: AB)` for an example where only the `constructor` is non-empty, and the call to `Point3DTest(p: Point3D)` for an example where the 3 arguments represent the 3 (integer) coordinates.
 
 
 ### List
