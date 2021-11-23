@@ -8,21 +8,9 @@ type Point3D = (* 3 integer coordinates: (x,y,z) *)
 
 contract Interfacing()
 
-(* transition with user defined ADT argument "type AB" *)
-transition ABTest(v: AB)
-  ev = {_eventname: "ABTest"; value : v};
-  event ev
-end
-
-(* transition with user defined ADT argument "type Point3D" *)
-transition Point3DTest(p: Point3D)
-  ev = {_eventname : "Point3DTest"; p: p};
-  event ev
-end
-
-(* transition with List argument *)
-transition ListTest(list: List String)
-  ev = {_eventname: "ListTest"; list: list};
+(* transition with Bool argument *)
+transition BoolTest(bool: Bool)
+  ev = {_eventname: "BoolTest"; bool: bool };
   event ev
 end
 
@@ -38,8 +26,26 @@ transition PairTest(pair: Pair Uint32 String)
   event ev
 end
 
-(* transition with Bool argument *)
-transition BoolTest(bool: Bool)
-  ev = {_eventname: "BoolTest"; bool: bool };
+(* transition with List argument *)
+transition ListTest(list: List String)
+  ev = {_eventname: "ListTest"; list: list};
+  event ev
+end
+
+(* transition with a List of Pairs (Uint32, String) argument *)
+transition ListOfPairsTest(list: List (Pair Uint32 String) )
+  ev = {_eventname: "ListOfPairsTest"; list: list};
+  event ev
+end
+
+(* transition with user defined ADT argument "type AB" *)
+transition ABTest(v: AB)
+  ev = {_eventname: "ABTest"; value : v};
+  event ev
+end
+
+(* transition with user defined ADT argument "type Point3D" *)
+transition Point3DTest(p: Point3D)
+  ev = {_eventname : "Point3DTest"; p: p};
   event ev
 end
