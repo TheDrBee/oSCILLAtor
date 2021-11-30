@@ -54,13 +54,26 @@ Further, this examples shows the usage of `_origin` which is the user account ad
 Script: [Callback.js](./js/Callback.js).
 
 ### Funds
-How to send/receive funds (native ZIL in units of QA with 1 ZIL = 10^12 QA) to/from a smart contract:
-The [Funds smart contract](./contracts/Funds.scilla) offers transitions to
-- send funds to it: `Deposit()`
-- withdraw an amount of funds from it: `Withdraw(amount: Uint128)`
-- withdraw all funds ("empty it"): `Empty()`.
 
-Script: [Funds.js](./js/Funds.js).
+Various functions that show how to use the JS lib to transfer funds (native ZIL in units of QA with 1 ZIL = 10^12 QA), see the
+script [Funds.js](./js/Funds.js).
+
+1) Check balances
+How to check the balance of an address and convert the units ('QA') to ZIL (using `units.fromQA(.`)), see the function `chk_zil_balances()`.
+
+2) Between (user) accounts
+How to send funds between two addresses using a 'Transaction'. This is particularly useful to transfer funds between user accounts, see the `function funds_transfer_between_accounts()`.
+
+3) To and From Contract
+How to send/receive funds to/from a smart contract: The [Funds smart contract](./contracts/Funds.scilla) offers transitions to
+ 
+   - send funds to it: `Deposit()`
+   - withdraw an amount of funds from it: `Withdraw(amount: Uint128)`
+   - withdraw all funds ("empty it"): `Empty()`.
+
+    See the function `funds_to_and_from_contract()`.
+
+
 
 ### InitParams
 How to initialize a field at deployment with an init parameter given at deployment.
