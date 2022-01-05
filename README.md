@@ -205,4 +205,4 @@ The script [UserLib.js](./js/UserLib.js) uses the JS SDK to show how to
 - define and deploy a library (only having pure expressions, no contract at all)
 - deploy a contract that imports and uses it.
 
-Note: This currently only works on Test-net.
+Note: This currently only works on isolated server (also: locally run using ceres) and test-net.

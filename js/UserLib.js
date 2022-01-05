@@ -1,7 +1,8 @@
 /*
   deploy a user defined lib, deploy a contract that uses it.
 
-  usage: $node UserLib.js
+  usage: $node UserLib.js {"test", "local"}
+
   pre: Zilliqa JS SDK from https://github.com/Zilliqa/Zilliqa-JavaScript-Library/
 
   see https://scilla.readthedocs.io/en/latest/scilla-in-depth.html#user-defined-libraries
@@ -13,10 +14,12 @@
     iv)   the entry _extlibs in the contract's init JSON needs double parenthesis for the type: 'List ( Pair (String) (ByStr20) )'
     v)    works so far only on testnet
 
-  Deployed Examples:
+  Deployed Examples on testnet:
   - lib: https://devex.zilliqa.com/address/0xcd766e4cdf627006a60910a6d73e3fd4a88a05f1?network=https://dev-api.zilliqa.com
   - contract: https://devex.zilliqa.com/address/0xfc3fABCe86AbdEC4A6c8204bA59939e7deD06B81?network=https://dev-api.zilliqa.com
 */
+'use strict';
+
 const assert = require('assert');
 const { Zilliqa } = require('@zilliqa-js/zilliqa');
 const { getAddressFromPrivateKey,
@@ -37,13 +40,33 @@ async function zil_balance_for_address(address, chain, verbose = false)
 
 async function run()
 {
-  // set up for testnet
-  const zilliqa = new Zilliqa('https://dev-api.zilliqa.com');
-  const VERSION = bytes.pack(333, 1);
-  // an account on testnet
-  // address: zil13kq5k3snl7xru47rqvty5mzw4qevsuy7xspadt // 0x8D814B4613fF8c3E57C303164a6C4Ea832c8709E
-  const private_key = '2ac3dddc46a2ea900e18ce16eae87f603237fcebbed7a080de569988ebf3abf2';
+  let on_testnet = false;
+  try {
+    console.log(process.argv)
+    const which_env = process.argv.slice(2)[0];
+    if (! ["test", "local"].includes(which_env)) {
+      throw Error("first argument needs to be test or local as string");
+    }
+    on_testnet = which_env==="test";
+  } catch (err) {
+    console.log("Invalid or missing argument: ERROR\n",err);
+  }
+  console.log(`Testing on ${on_testnet ? 'testnet' : 'locally run isolated server'}`);
+
+
+
+  // set up for testnet or ceres local server
+  const zilliqa = new Zilliqa(on_testnet ? 'https://dev-api.zilliqa.com' : 'http://localhost:5555');
+  const VERSION = bytes.pack(on_testnet ? 333 : 222, 1);
+  // an account on testnet and one on ceres
+  // address:   zil13kq5k3snl7xru47rqvty5mzw4qevsuy7xspadt // 0x8D814B4613fF8c3E57C303164a6C4Ea832c8709E
+  //            zil1my8ju5uvur0cnjp88jknkclvgj3ufmvz5pxyml // 0xd90f2e538ce0df89c8273cad3b63ec44a3c4ed82
+  const private_key =
+    on_testnet ?
+    '2ac3dddc46a2ea900e18ce16eae87f603237fcebbed7a080de569988ebf3abf2' :
+    'e53d1c3edaffc7a7bab5418eb836cf75819a82872b4a1a0f1c7fcf5c3e020b89';
   const address = getAddressFromPrivateKey(private_key); // base 16
+  console.log(address);
 
   // query and log balance of account, add account to wallet if balace sufficient
   try {
