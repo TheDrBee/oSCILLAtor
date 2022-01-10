@@ -1,0 +1,21 @@
+scilla_version 0
+
+import AdtLib
+
+contract RemoteReadAdtFrom
+()
+
+field ab : AB = (* the type AB is defined in AdtLib *)
+  let def_value = Uint32 0 in
+  A def_value
+
+(* set the value of the ADT to be either A n, or B n with n a Uint32            *)
+transition SetAsA(n: Uint32)
+  v = A n; (* using ctor A of Uint32 of AB *)
+  ab := v
+end
+
+transition SetAsB(n: Uint32)
+  v = B n; (* using ctor B of Uint32 of AB *)
+  ab := v
+end

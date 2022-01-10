@@ -180,14 +180,24 @@ The [Recursion smart contract](./contracts/Recursion.scilla) shows how to use re
 - compute the factorial of `n`: n! = 1 if n=0 and else n! = n*(n-1)*...*1, see `transition Factorial(n: Uint32)`
 
 ### Remote State Read
-The [RemoteRead smart contract](./contracts/RemoteRead.scilla) shows how to read a field from a diffrent contract deployed on the chain:
-- The transition `ReadValueFromSetGet(.)` reads the field `value` from the smart contract [SetGet](./contracts/SetGet.scilla), see below. It defines the transition parameter `c` (the contract's address) as an address with a type of a contract with a field "value" of type "Uint128": `transition ReadValueFromSetGet(c: ByStr20 with contract field value: Uint128 end)`
-- The transition `ReadValueFromSetGet2(.)` uses a different approach to achieve the same purpose: instead of defining the transition parameter as a typed address, it does an address type cast inside the transition using the keyword `as` to be able to then read a field from that address: `contract_opt <- &addr as ByStr20 with contract field value: Uint128 end;`
+1. Reading built-in types:
 
-Script: [RemoteRead.js](./js/RemoteRead.js).
+    The [RemoteRead smart contract](./contracts/RemoteRead.scilla) shows how to read a field from a diffrent contract deployed on the chain:
+    - The transition `ReadValueFromSetGet(.)` reads the field `value` from the smart contract [SetGet](./contracts/SetGet.scilla), see below. It defines the transition parameter `c` (the contract's address) as an address with a type of a contract with a field "value" of type "Uint128": `transition ReadValueFromSetGet(c: ByStr20 with contract field value: Uint128 end)`
+    - The transition `ReadValueFromSetGet2(.)` uses a different approach to achieve the same purpose: instead of defining the transition parameter as a typed address, it does an address type cast inside the transition using the keyword `as` to be able to then read a field from that address: `contract_opt <- &addr as ByStr20 with contract field value: Uint128 end;`
 
-**Notes**:
-The first approach is currently not working when using the [IDE](https://ide.zilliqa.com/#/) as the IDE needs to be upgraded to handle address types correctly first. It works, however, when calling the transition using the JS SDK (as in the [script](./js/RemoteRead.js)). The second approach on the other hand works on the IDE but not yet on ceres local server, because ceres still needs to be upgraded to support address type casts.
+    Script: [RemoteRead.js](./js/RemoteRead.js).
+
+    **Notes**:
+    The first approach is currently not working when using the [IDE](https://ide.zilliqa.com/#/) as the IDE needs to be upgraded to handle address types correctly first. It works, however, when calling the transition using the JS SDK (as in the [script](./js/RemoteRead.js)). The second approach on the other hand works on the IDE but not yet on ceres local server, because ceres still needs to be upgraded to support address type casts.
+2. Reading a user defined ADT `AB`. Note that in this case the ADT needs to be defined in a user defined library (see [AdtLib.scilla](./scilib/AdtLib.scilib)) and both contracts 
+    - the one defining the field from which it is then read, see [RemoteReadAdtFrom.scilla](./contracts/RemoteReadAdtFrom.scilla)
+    - the one reading the lib (and thus the definition), see [RemoteReadAdt.scilla](./contracts/RemoteReadAdt.scilla)
+  
+    must import the user defined library using `import AdtLib`, i.e. the type `AB` is the same common one.
+
+    Script: [RemoteReadAdt.js](js/RemoteReadAdt.js)
+
 
 ### Set and Get
 The [SetGet smart contract](./contracts/SetGet.scilla) shows how to modify a state variable through a transition, and how to emit the value of a state variable in an event.
@@ -206,3 +216,5 @@ The script [UserLibAllInOne.js](./js/UserLibAllInOne.js) uses the JS SDK to show
 - deploy a contract that imports and uses it.
 
 Note: This currently only works on isolated server (also: locally run using ceres) and test-net.
+
+See also [RemoteReadAdt.js](js/RemoteReadAdt.js) where a user defined library defining a user defined ADT `AB` is deployed, namely [AdtLib.scilib](./scilib/AdtLib.scilib).

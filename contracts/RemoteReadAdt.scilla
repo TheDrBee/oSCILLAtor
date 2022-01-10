@@ -1,0 +1,23 @@
+scilla_version 0
+
+import AdtLib
+
+library RemoteReadAdt
+
+let n_from_ab : AB -> Uint32 = (* extract n. Note that AB is defined in AdtLib! *)
+  fun (ab : AB) =>
+    match ab with
+    | A n => n
+    | B n => n
+    end
+
+contract RemoteReadAdt
+()
+
+(* read field ab of type AB from deployed RemoteReadAdtFrom conract             *)
+transition Read(c: ByStr20 with contract field ab: AB end)
+  v <- & c.ab;
+  n = n_from_ab v;
+  ev = {_eventname: "Read"; n: n};
+  event ev
+end

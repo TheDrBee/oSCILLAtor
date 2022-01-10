@@ -1,0 +1,10 @@
+(* a library defining                                             *)
+(*   - an ADT that is either "A n" or "B n" where n is a Uint32   *)
+(*   - a function to extract the Uint32 n from it                 *)
+scilla_version 0
+
+library AdtLib
+
+type AB =
+ | A of Uint32
+ | B of Uint32
