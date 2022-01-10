@@ -1,7 +1,7 @@
 /*
   deploy a user defined lib, deploy a contract that uses it.
 
-  usage: $node UserLib.js {"test", "local"}
+  usage: $node UserLibAllInOne.js {"test", "local"}
 
   pre: Zilliqa JS SDK from https://github.com/Zilliqa/Zilliqa-JavaScript-Library/
 
@@ -25,6 +25,7 @@ const { Zilliqa } = require('@zilliqa-js/zilliqa');
 const { getAddressFromPrivateKey,
         toBech32Address } = require('@zilliqa-js/crypto');
 const { BN, Long, units, bytes } = require('@zilliqa-js/util');
+const { deploy_lib_from_file } = require("./blockchain.js");
 
 // utility to query balance of address and convert from QA to ZIL
 async function zil_balance_for_address(address, chain, verbose = false)
@@ -42,7 +43,7 @@ async function run()
 {
   let on_testnet = false;
   try {
-    console.log(process.argv)
+    //console.log(process.argv)
     const which_env = process.argv.slice(2)[0];
     if (! ["test", "local"].includes(which_env)) {
       throw Error("first argument needs to be test or local as string");
@@ -50,10 +51,9 @@ async function run()
     on_testnet = which_env==="test";
   } catch (err) {
     console.log("Invalid or missing argument: ERROR\n",err);
+    process.exit(1);
   }
   console.log(`Testing on ${on_testnet ? 'testnet' : 'locally run isolated server'}`);
-
-
 
   // set up for testnet or ceres local server
   const zilliqa = new Zilliqa(on_testnet ? 'https://dev-api.zilliqa.com' : 'http://localhost:5555');
@@ -80,12 +80,6 @@ async function run()
       const gl = Long.fromNumber(80000); // gas limit: set at highest possible value here...
       const attempts = Long.fromNumber(20);
       const timeout = 500;
-      // simplistic lib... just defining a constant 'one' to have value 1 (and type 'Uint32')
-      const lib_code =
-      `scilla_version 0
-       library SimpleLib
-       let one = Uint32 1
-      `;
       const lib_init = [
         { vname: '_scilla_version', type: 'Uint32', value: '0', },
         // additional entry to declare this as library and not as contract
@@ -93,15 +87,11 @@ async function run()
           value: { constructor: 'True', argtypes: [], arguments: [] }
         }
       ];
-      const user_lib = zilliqa.contracts.new(lib_code, lib_init);
       let tx = '';
       let lib = null;
       console.log(` .. deploying library`);
 
-      [tx, lib] = await user_lib.deploy(
-        { version: VERSION, gasPrice: gp, gasLimit: gl, },
-        attempts, timeout, false,
-      );
+      [tx, lib] = await deploy_lib_from_file('./../scilib/SimplisticLib.scilib');
       console.log(`  > transaction receipt is: ${JSON.stringify(tx.receipt)}`);
 
       let lib_address = '';
@@ -118,7 +108,7 @@ async function run()
       try {
         const contract_code =
         `scilla_version 0
-         import SimpleLib
+         import SimplisticLib
          contract TestUserLib()
          transition Compute()
            result = one; (* from SimpleLib *)
@@ -132,7 +122,7 @@ async function run()
           { vname : '_extlibs', type : 'List ( Pair (String) (ByStr20) )',
             value : [
               { constructor : 'Pair', argtypes : ['String', 'ByStr20'],
-                arguments : ['SimpleLib', lib_address]
+                arguments : ['SimplisticLib', lib_address]
               },
             ]
           },

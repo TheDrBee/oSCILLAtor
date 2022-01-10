@@ -60,6 +60,23 @@ async function deploy_from_file(path, init)
   );
 }
 
+// deploy a scilla lib whose code is in a string
+async function deploy_lib_from_file(path)
+{
+ const lib_init = [
+         { vname: '_scilla_version', type: 'Uint32', value: '0', },
+         { vname : '_library', type : 'Bool',
+           value: { constructor: 'True', argtypes: [], arguments: [] }
+         }
+       ];
+ const code = read(path);
+ const user_lib = setup.zilliqa.contracts.new(code, lib_init);
+ return user_lib.deploy( // Deployment
+   { version: setup.VERSION, gasPrice: tx_settings.gas_price, gasLimit: tx_settings.gas_limit, },
+   tx_settings.attempts, tx_settings.timeoute, false
+ );
+}
+
 // call a smart contract's transition with given args and an amount to send from a given public key
 async function sc_call(sc, transition, args = [], amt = new BN(0), caller_pub_key = setup.pub_keys[0])
 {
@@ -72,5 +89,8 @@ async function sc_call(sc, transition, args = [], amt = new BN(0), caller_pub_ke
   );
 }
 
+
+
 exports.deploy_from_file = deploy_from_file;
+exports.deploy_lib_from_file = deploy_lib_from_file;
 exports.sc_call = sc_call;

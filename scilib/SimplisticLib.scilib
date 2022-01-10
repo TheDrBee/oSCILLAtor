@@ -1,0 +1,8 @@
+(* a really simplistic lib:                                                     *)
+(* just defining a constant 'one' to have value 1 (and type 'Uint32'))          *)
+
+scilla_version 0
+
+library SimplisticLib
+
+let one = Uint32 1

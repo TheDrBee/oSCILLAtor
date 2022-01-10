@@ -66,7 +66,7 @@ How to send funds between two addresses using a 'Transaction'. This is particula
 
 3) To and From Contract
 How to send/receive funds to/from a smart contract: The [Funds smart contract](./contracts/Funds.scilla) offers transitions to
- 
+
    - send funds to it: `Deposit()`
    - withdraw an amount of funds from it: `Withdraw(amount: Uint128)`
    - withdraw all funds ("empty it"): `Empty()`.
@@ -201,7 +201,7 @@ The [TypeFunction smart contract](./contracts/TypeFunction.scilla) shows example
 
 
 ### User defined Library
-The script [UserLib.js](./js/UserLib.js) uses the JS SDK to show how to
+The script [UserLibAllInOne.js](./js/UserLibAllInOne.js) uses the JS SDK to show how to
 - define and deploy a library (only having pure expressions, no contract at all)
 - deploy a contract that imports and uses it.
 
