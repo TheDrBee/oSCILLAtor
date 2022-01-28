@@ -85,7 +85,7 @@ The [InitParams smart contract](./contracts/InitParams.scilla) shows
   ii) a list not to an empty list (`nil`) but to a list `[element, 1, 2]` where `element` is an init parameter
 - how to check init parameters using `with .... =>` by checking if the given `element` is smaller then 10, and if an `Int32 number` is positive. If not, the deployment fails.
 
-Script: [InitParams](./js/InitParams.js).
+Script: [InitParams.js](./js/InitParams.js).
 
 
 ### Integers
