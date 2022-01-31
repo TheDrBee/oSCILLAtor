@@ -1,7 +1,7 @@
 # oSCILLAtor
 
 ## Overview
-Exampes and Snippets of the [scilla programming language](https://scilla.readthedocs.io/en/latest/).
+Examples and Snippets of the [scilla programming language](https://scilla.readthedocs.io/en/latest/) and the [Zilliqa JS lib](https://github.com/Zilliqa/Zilliqa-JavaScript-Library).
 
 Contracts are all in folder `contracts/`.
 
