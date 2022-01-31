@@ -3,7 +3,7 @@
 Hints, tipps and tricks for using [IDE](https://ide.zilliqa.com/#/) or [staging-IDE](https://stg-ide.zilliqa.com/#/).
 
 ## Special Deployment Variables and Transition Parameters
-Entering ADT in the IDE can be tricky. Assume the following transition arguments
+Entering an ADT or complex types like a `List` in the IDE can be tricky. Assume the following transition arguments
 
 ### Boolean
 Enter the 'Bool" with JSDON-style entry that tives the constructor `True` or `False`, and empty argument types and values. For example to call `transition ABool(b: Bool)` with `False` enter `{ "constructor": "False", "argtypes": [], "arguments": [] }`
