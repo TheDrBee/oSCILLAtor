@@ -7,6 +7,8 @@ Contracts are all in folder `contracts/`.
 
 Scripts using the [Zilliqa JS lib](https://github.com/Zilliqa/Zilliqa-JavaScript-Library) that deploy the contracts and interact with them through their transitions are in folder `js/`. They are run in that directory using: `node <ScriptName.js>`.
 
+We also collect some tipps and tricks for using the IDE [here](./IDE-HINTS.md).
+
 ## Installation
 ```bash
 yarn  # install Zilliqa JS and required dependencies
