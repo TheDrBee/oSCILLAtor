@@ -12,9 +12,12 @@ Enter the 'Bool" with a JSON-style entry that gives the constructor `True` or `F
 Enter the `Pair` with a JSON-style entry that gives the constructor, the two argument types and the two values of the `Pair`'s entries. For example to call  a `transition APair(pair: Pair Int32 Uint32)` with the argument (-1,5) enter 
   `{"constructor":  "Pair", "argtypes": ["Int32", "Uint32"], "arguments": ["-1", "5"] }`
 
+### Option
+Enter the `Option` with a JSON-style entry that gives the constructor (`None` or `Some`), the argument type and for a non-empty Option the argument value (as String). For example to call a `transition AnOption(option: Option Uint32)` enter
+- `{ "constructor": "None", "argtypes": ["Uint32"], "arguments": [] }` for an empty `Option`
+- `{ "constructor": "Some", "argtypes": ["Uint32"], "arguments": ["12"] }` for an `Option` holding the value 12. 
 
 ### List
-Enter the list as an array with each of the `List`'s elements as `String`. For example to call a 
-`transition AList(str_list: List String, int_list: List Int32)` with the two lists as arguments {'Oh', 'Hello', 'Joe'} and {1,2} enter `["Oh, "Hello", "Joe"]` (for `str_list`) and `["1", "2"]` (for `int_list`).
+Enter the list as an array with each of the `List`'s elements as `String`. For example to call a `transition AList(str_list: List String, int_list: List Int32)` with the two lists as arguments {'Oh', 'Hello', 'Joe'} and {1,2} enter `["Oh, "Hello", "Joe"]` (for `str_list`) and `["1", "2"]` (for `int_list`).
 
 
