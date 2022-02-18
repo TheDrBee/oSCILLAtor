@@ -20,7 +20,7 @@ Ready-to-use implementations to start building.
 
 ### Ownership Template
 
-The [OwnershipTemplate smart contract](./contracts/templates/OwnershipTemplate.scilla) implemenents the concept of (single) ownership: a special account (address) is "owning" the contract. It can be used to limit (or exclude) access to certain transitions to this account only. It implements the best practice for a safe change in owner ship (see [Scilla Documentation](https://scilla.readthedocs.io/en/latest/scilla-tips-and-tricks.html#transfer-contract-ownership):
+The [OwnershipTemplate smart contract](./contracts/templates/OwnershipTemplate.scilla) implemenents the concept of (single) ownership: a special account (address) is "owning" the contract. It can be used to limit (or exclude) access to certain transitions to this account only. It implements the best practice for a safe transfer of ownership, ie. change to a new owner (see [Scilla Documentation](https://scilla.readthedocs.io/en/latest/scilla-tips-and-tricks.html#transfer-contract-ownership)):
 
   1. The current owner proposes (stages) a new owner: `transition RequestOwnershipTransfer(new_owner : ByStr20)`
 
