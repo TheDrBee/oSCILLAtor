@@ -1,11 +1,13 @@
 # oSCILLAtor
 
 ## Overview
-Exampes and Snippets of the [scilla programming language](https://scilla.readthedocs.io/en/latest/).
+Examples and Snippets of the [scilla programming language](https://scilla.readthedocs.io/en/latest/) and the [Zilliqa JS lib](https://github.com/Zilliqa/Zilliqa-JavaScript-Library).
 
 Contracts are all in folder `contracts/`. The subdirectory `templates` containts scilla contracts that are "ready to use" implementations of best practices (see [Templates](#templates)).
 
 Scripts using the [Zilliqa JS lib](https://github.com/Zilliqa/Zilliqa-JavaScript-Library) that deploy the contracts and interact with them through their transitions are in folder `js/`. They are run in that directory using: `node <ScriptName.js>`.
+
+We also collect some tipps and tricks for using the IDE [here](./IDE-HINTS.md).
 
 ## Installation
 ```bash
@@ -99,7 +101,7 @@ The [InitParams smart contract](./contracts/InitParams.scilla) shows
   ii) a list not to an empty list (`nil`) but to a list `[element, 1, 2]` where `element` is an init parameter
 - how to check init parameters using `with .... =>` by checking if the given `element` is smaller then 10, and if an `Int32 number` is positive. If not, the deployment fails.
 
-Script: [InitParams](./js/InitParams.js).
+Script: [InitParams.js](./js/InitParams.js).
 
 
 ### Integers
