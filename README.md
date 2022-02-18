@@ -3,7 +3,7 @@
 ## Overview
 Exampes and Snippets of the [scilla programming language](https://scilla.readthedocs.io/en/latest/).
 
-Contracts are all in folder `contracts/`.
+Contracts are all in folder `contracts/`. The subdirectory `templates` containts scilla contracts that are "ready to use" implementations of best practices (see [Templates](#templates)).
 
 Scripts using the [Zilliqa JS lib](https://github.com/Zilliqa/Zilliqa-JavaScript-Library) that deploy the contracts and interact with them through their transitions are in folder `js/`. They are run in that directory using: `node <ScriptName.js>`.
 
@@ -13,7 +13,21 @@ yarn  # install Zilliqa JS and required dependencies
 ```
 In order to run the JS scripts install [ceres](https://github.com/Zilliqa/ceres/releases) (needs docker), and start the "Isolated server".
 
-## Examples
+## Templates 
+Ready-to-use implementations to start building.
+
+### Ownership Template
+
+The [OwnershipTemplate smart contract](./contracts/templates/OwnershipTemplate.scilla) implemenents the concept of (single) ownership: a special account (address) is "owning" the contract. It can be used to limit (or exclude) access to certain transitions to this account only. It implements the best practice for a safe change in owner ship (see [Scilla Documentation](https://scilla.readthedocs.io/en/latest/scilla-tips-and-tricks.html#transfer-contract-ownership):
+
+  1. The current owner proposes (stages) a new owner: `transition RequestOwnershipTransfer(new_owner : ByStr20)`
+
+  2. The proposed new owner accepts the owner ship: `transition ConfirmOwnershipTransfer()`
+
+Furthermore, the owner can also cancel a pending ownership transfer: `transition CancelOwnershipTransfer()`
+
+
+## Examples 
 
 ### Adt
 How to define and use (user defined) algebraic data types (ADTs), and how to call transitions using the JS lib with ADT arguments:
@@ -166,7 +180,7 @@ It shows three ways of how to change the owner of the contract:
 
 - `transition ChangeOwner(new_owner : ByStr20)`: here everybody can change the owner to any address, which is very dangerous and **should not be done**
 - `transition ChangeOwnerByOwnerOnly(new_owner : ByStr20)`: here only the onwer can change the ownership. This is better, yet **still problematic** as the `new_owner` might be wrong (a typo is enough...), and thus the contract will have either a wrong owner, or even worse a non-existing owner.
-- The suggested way of transfering ownership, see [Scilla Documentation](https://scilla.readthedocs.io/en/latest/scilla-tips-and-tricks.html#transfer-contract-ownership) -- **use this in practice**:
+- The suggested way of transfering ownership, see [Scilla Documentation](https://scilla.readthedocs.io/en/latest/scilla-tips-and-tricks.html#transfer-contract-ownership) -- **use this in practice**, see the 'Ownership Template' in [Templates](#templates):
 
   1. The current owner proposes (stages) a new owner: `transition RequestOwnershipTransfer(new_owner : ByStr20)`
 

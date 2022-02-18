@@ -1,0 +1,85 @@
+scilla_version 0
+
+library OwnershipTemplate
+
+(* error/exception codes *)
+let ec_not_owner                    = Int32 -1  (* transition not originated by the current owner *)
+let ec_not_proposed_owner           = Int32 -2  (* transition not originated by the proposed new owner *)
+let ec_no_owner_proposed            = Int32 -3  (* if owner has not proposed a new owner transfer cannot happen *)
+let ec_proposed_owner_is_current    = Int32 -4  (* owner cannot propose self as new owner*)
+
+
+contract OwnershipTemplate
+(owner_at_deployment: ByStr20)
+
+field owner : ByStr20 = owner_at_deployment (* the current owner *)
+field proposed_new_owner: Option ByStr20 = None {ByStr20} (* a new owner has been proposed *)
+
+(* throw an excepton using an error code                                        *)
+(* @param: ec an error code as defined in the library section: ec_xxx           *)
+procedure Throw(ec: Int32)
+  err = {_exception: "Error"; code: ec};
+  throw err
+end
+
+(* check if _origin is the owner and throw if not                               *)
+procedure ThrowIfOriginIsNotTheOwner()
+  current <- owner;
+  is_owner = builtin eq _origin current;
+  match is_owner with
+  | False =>
+    Throw ec_not_owner
+  | True =>
+  end
+end
+
+(* @notice: Allows the current owner to propose a new owner                     *)
+(*          New (proposed) owner will have to confirm to become the new owner   *)
+(* @param:  new_owner    address of a new proposed owner                        *)
+transition RequestOwnershipTransfer(new_owner : ByStr20)
+  ThrowIfOriginIsNotTheOwner;
+  current <- owner;
+  proposed_owner_not_new = builtin eq new_owner current;
+  match proposed_owner_not_new with
+  | True =>
+    Throw ec_proposed_owner_is_current
+  | False =>
+    proposed = Some {ByStr20} new_owner;
+    proposed_new_owner := proposed;
+    ev = {_eventname: "RequestOwnershipTransferSuccess"; proposed_new_owner: proposed};
+    event ev
+  end
+end
+
+procedure SetProposedOwnerToNone()
+  none_proposed = None {ByStr20};
+  proposed_new_owner := none_proposed
+end
+
+(* @notice: Allows a proposed new owner to confirm it and become new owner      *)
+transition ConfirmOwnershipTransfer()
+  proposed_option <- proposed_new_owner;
+  match proposed_option with
+  | None =>
+    Throw ec_no_owner_proposed
+  | Some proposed_owner =>
+    origin_is_new_owner = builtin eq _origin proposed_owner;
+    match origin_is_new_owner with
+    | False => (* caller is not the proposed new owner *)
+      Throw ec_not_proposed_owner
+    | True => (* transfer ownership *)
+      owner := proposed_owner;
+      SetProposedOwnerToNone;
+      ev = {_eventname: "ConfirmOwnershipTransferSuccess"; new_owner: proposed_owner};
+      event ev
+    end
+  end
+end
+
+(* @notice: Allows the current owner to cancel any proposed ownership transfer  *)
+transition CancelOwnershipTransfer()
+  ThrowIfOriginIsNotTheOwner;
+  SetProposedOwnerToNone;
+  ev = {_eventname: "CancelOwnershipTransferSuccess"};
+  event ev
+end
