@@ -3,7 +3,7 @@
 ## Overview
 Examples and Snippets of the [scilla programming language](https://scilla.readthedocs.io/en/latest/) and the [Zilliqa JS lib](https://github.com/Zilliqa/Zilliqa-JavaScript-Library).
 
-Contracts are all in folder `contracts/`. The subdirectory `templates` containts scilla contracts that are "ready to use" implementations of best practices (see [Templates](#templates)).
+Contracts are all in folder `contracts/`. The subdirectory `templates` containts scilla contracts that are "ready to use" implementations of best practices (see [Templates](#templates)) - of course "AS IS", see [LICENSE](./LICENSE) without any warranty.
 
 Scripts using the [Zilliqa JS lib](https://github.com/Zilliqa/Zilliqa-JavaScript-Library) that deploy the contracts and interact with them through their transitions are in folder `js/`. They are run in that directory using: `node <ScriptName.js>`.
 
@@ -20,7 +20,7 @@ Ready-to-use implementations to start building.
 
 ### Ownership Template
 
-The [OwnershipTemplate smart contract](./contracts/templates/OwnershipTemplate.scilla) implemenents the concept of (single) ownership: a special account (address) is "owning" the contract. It can be used to limit (or exclude) access to certain transitions to this account only. It implements the best practice for a safe transfer of ownership, ie. change to a new owner (see [Scilla Documentation](https://scilla.readthedocs.io/en/latest/scilla-tips-and-tricks.html#transfer-contract-ownership)):
+The [OwnershipTemplate smart contract](./contracts/templates/OwnershipTemplate.scilla) implemenents the concept of (single) ownership: a special account (address) is "owning" the contract. It can be used to limit (or exclude) access to certain transitions to (or from) this account only. It implements the best practice for a safe transfer of ownership, ie. change to a new owner (see [Scilla Documentation](https://scilla.readthedocs.io/en/latest/scilla-tips-and-tricks.html#transfer-contract-ownership), using the 'explicit' implementation for clarity):
 
   1. The current owner proposes (stages) a new owner: `transition RequestOwnershipTransfer(new_owner : ByStr20)`
 
