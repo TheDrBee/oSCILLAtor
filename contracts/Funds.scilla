@@ -31,13 +31,13 @@ procedure TransferTo(to : ByStr20, amount : Uint128)
   send msgs
 end
 
-transition Deposit() (* send QA to contract to receive and store it in contract *)
+transition AddFunds() (* send QA to contract to receive and store it in contract *)
   received = is_positive _amount;
   match received with
   |True  =>
     accept;
     b <- _balance;
-    ev = {_eventname: "DepositSuccess"; amount_received: _amount; new_balance: b};
+    ev = {_eventname: "AddFundsSuccess"; amount_received: _amount; new_balance: b};
     event ev
   |False =>
   end

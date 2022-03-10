@@ -15,7 +15,7 @@ yarn  # install Zilliqa JS and required dependencies
 ```
 In order to run the JS scripts install [ceres](https://github.com/Zilliqa/ceres/releases) (needs docker), and start the "Isolated server".
 
-## Templates 
+## Templates
 Ready-to-use implementations to start building.
 
 ### Ownership Template
@@ -29,7 +29,7 @@ The [OwnershipTemplate smart contract](./contracts/templates/OwnershipTemplate.s
 Furthermore, the owner can also cancel a pending ownership transfer: `transition CancelOwnershipTransfer()`
 
 
-## Examples 
+## Examples
 
 ### Adt
 How to define and use (user defined) algebraic data types (ADTs), and how to call transitions using the JS lib with ADT arguments:
@@ -83,12 +83,11 @@ How to send funds between two addresses using a 'Transaction'. This is particula
 3) To and From Contract
 How to send/receive funds to/from a smart contract: The [Funds smart contract](./contracts/Funds.scilla) offers transitions to
 
-   - send funds to it: `Deposit()`
+   - send funds to it: `AddFunds()` (following naming convention of [ZRC-5](https://github.com/Zilliqa/ZRC/blob/main/zrcs/zrc-5.md))
    - withdraw an amount of funds from it: `Withdraw(amount: Uint128)`
    - withdraw all funds ("empty it"): `Empty()`.
 
     See the function `funds_to_and_from_contract()`.
-
 
 
 ### InitParams
@@ -206,10 +205,10 @@ The [Recursion smart contract](./contracts/Recursion.scilla) shows how to use re
 
     **Notes**:
     The first approach is currently not working when using the [IDE](https://ide.zilliqa.com/#/) as the IDE needs to be upgraded to handle address types correctly first. It works, however, when calling the transition using the JS SDK (as in the [script](./js/RemoteRead.js)). The second approach on the other hand works on the IDE but not yet on ceres local server, because ceres still needs to be upgraded to support address type casts.
-2. Reading a user defined ADT `AB`. Note that in this case the ADT needs to be defined in a user defined library (see [AdtLib.scilib](./scilib/AdtLib.scilib)) and both contracts 
+2. Reading a user defined ADT `AB`. Note that in this case the ADT needs to be defined in a user defined library (see [AdtLib.scilib](./scilib/AdtLib.scilib)) and both contracts
     - the one defining the field from which it is then read, see [RemoteReadAdtFrom.scilla](./contracts/RemoteReadAdtFrom.scilla)
     - the one reading the lib (and thus the definition), see [RemoteReadAdt.scilla](./contracts/RemoteReadAdt.scilla)
-  
+
     must import the user defined library using `import AdtLib`, i.e. the type `AB` is the same common one.
 
     Script: [RemoteReadAdt.js](js/RemoteReadAdt.js)

@@ -90,7 +90,7 @@ async function funds_to_and_from_contract()
     console.log("contract deployed @ ", sc.address);
     try { // deposit 100 ZIL from account 0
       amount = units.toQa('100', 'zil');
-      tx = await sc_call(sc, "Deposit", [], amount);
+      tx = await sc_call(sc, "AddFunds", [], amount);
       await log_it(sc, tx);
       try { // withdraw 60 ZIL
         amount = units.toQa('60', 'zil');
@@ -123,5 +123,5 @@ async function funds_to_and_from_contract()
 }
 
 //chk_zil_balances();
-funds_transfer_between_accounts();
-//funds_to_and_from_contract();
+//funds_transfer_between_accounts();
+funds_to_and_from_contract();
