@@ -14,7 +14,7 @@ transition BoolTest(bool: Bool)
   event ev
 end
 
-(* transition with Option argumen *)
+(* transition with Option argument *)
 transition OptionTest(option: Option Uint32)
   ev = {_eventname: "OptionTest"; option: option };
   event ev
