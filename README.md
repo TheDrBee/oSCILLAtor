@@ -139,13 +139,15 @@ The [List smart contract](./contracts/List.scilla) shows list manipulations and 
 - count the number of occurences of a value in a list: This applies a left fold `list_foldl` to a list where the accumulator is increased by one if an element of the list matches a given value (and remains equal if not). See `count_in_list` and the tranition `Count(.)` which tests this by counting how many 1's there are in a few lists.
 - check if a list is "unique" in the sense that each element of it is unique (i.e., it's only once in the list). This applies above `count_in_list` using a `list_for_all` to each element of the same list (and checks the result of each count against 1). See `is_unique` and the transition `CheckUniqueness` which tests this for a few lists.
 
+Script: [List.js](./js/List.js).
+
+The [ForAllWithArgs](./contracts/ForAllWithArgs.scilla) smart contract shows a possibility on how to work around a limitation of `forall`: Namely, `forall` calls a procedure that takes (exactly!) one argument for each element of a list (holding elements of that type too) one-by-one. It is, however, not possible to pass another argument (possibly of a different type) in each call, or a parameter (that is the same for each call). One could use a field to "pass" the parameter: writing its value before calling `forall` and reading it in the procedure. However, this still does not allow passing a different second argument in each call. The solution presented here constructs a list holding `Pair`s of the first and second argument (using `list_zip` from ListUtils), and this list of pairs is passed to `forall`. Consequently, the procedure takes an argument of such a pair type. Inside the procedure the pair is split in its two elements (using `fst` and `snd` from PairUtils) and this gives the two arguments.
 
 See also
 - [InitParams smart contract](./contracts/InitParams.scilla) on how to initialize a list that is a field using a parameter at deployment.
 - [Recursion smart contract](./contracts/Recursion.scilla) on how to build a list [m, m+1, ..., n-1] for parameters `m` and `n`.
 - [AMap smart contract](./contracts/AMap.scilla) on how to use `@list_foldl` to sum up elements in a list.
 
-Script: [List.js](./js/List.js).
 
 ### Map
 The [AMap smart contract](./contracts/AMap.scilla) shows operations that are less known on `Map' type.
