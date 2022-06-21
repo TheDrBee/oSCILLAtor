@@ -1,0 +1,83 @@
+scilla_version 0
+
+import PairUtils
+
+library Triple
+
+
+let make_triple = (* ((fst, snd), trd) *)
+  tfun 'FST =>
+  tfun 'SND =>
+  tfun 'TRD =>
+  fun(fst: 'FST) =>
+  fun(snd: 'SND) =>
+  fun(trd: 'TRD) =>
+    let fstsnd = Pair {('FST) ('SND)} fst snd in
+    Pair{ (Pair ('FST) ('SND)) 'TRD} fstsnd trd
+
+let tfst = (* get fst *)
+  tfun 'FST =>
+  tfun 'SND =>
+  tfun 'TRD =>
+  fun (t : Pair (Pair ('FST) ('SND)) 'TRD) =>
+    let first_el = @fst (Pair ('FST) ('SND)) ('TRD) in
+    let fstsnd = first_el t in
+    match fstsnd with
+    | Pair fst snd => fst
+    end
+
+let tsnd = (* get snd *)
+  tfun 'FST =>
+  tfun 'SND =>
+  tfun 'TRD =>
+  fun (t : Pair (Pair ('FST) ('SND)) 'TRD) =>
+    let first_el = @fst (Pair ('FST) ('SND)) ('TRD) in
+    let fstsnd = first_el t in
+    match fstsnd with
+    | Pair fst snd => snd
+    end
+
+let ttrd = (* get trd *)
+  tfun 'FST =>
+  tfun 'SND =>
+  tfun 'TRD =>
+  fun (t : Pair (Pair ('FST) ('SND)) 'TRD) =>
+    let second_el = @snd (Pair ('FST) ('SND)) ('TRD) in
+    second_el t
+
+contract Triple()
+
+transition TestUint32Uint64Uint128()
+
+  (* elements of triple to check: note they have different types *)
+  fst_el = Uint32  1;
+  snd_el = Uint64  2;
+  trd_el = Uint128 3;
+
+  (* build a triple (fst_el, snd_el, trd_el) *)
+  triple =
+    let make = @make_triple Uint32 Uint64 Uint128 in
+  make fst_el snd_el trd_el;
+  (* extract the 3 elements from the triple *)
+  fst =
+    let get_fst  = @tfst Uint32 Uint64 Uint128 in
+  get_fst triple;
+  snd =
+    let get_snd  = @tsnd Uint32 Uint64 Uint128 in
+  get_snd triple;
+  trd =
+    let get_trd  = @ttrd Uint32 Uint64 Uint128 in
+  get_trd triple;
+  (* emit to check *)
+  ev = {
+    _eventname: "TestUint32Uint64Uint128";
+    fst_el: fst_el;
+    fst: fst;
+    snd_el: snd_el;
+    snd: snd;
+    trd_el: trd_el;
+    trd: trd
+  };
+  event ev
+
+end

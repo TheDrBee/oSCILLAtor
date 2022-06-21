@@ -28,6 +28,8 @@ The [OwnershipTemplate smart contract](./contracts/templates/OwnershipTemplate.s
 
 Furthermore, the owner can also cancel a pending ownership transfer: `transition CancelOwnershipTransfer()`
 
+### Triple Template
+The [Triple Template smart contract](./contracts/templates/TripleTemplate.scilla) implements a triple of values that may be of different types, similar to a [Pair](https://scilla.readthedocs.io/en/latest/scilla-in-depth.html#pair) but for three instead of two values.
 
 ## Examples
 
@@ -225,6 +227,8 @@ Script: [SetGet.js](./js/SetGet.js).
 The [TypeFunction smart contract](./contracts/TypeFunction.scilla) shows examples how to define type function with 1 or 2 arguments, and how to use them for concrete types, see `tfun: 'T => expr` in the [Scilla documentation](https://scilla.readthedocs.io/en/latest/scilla-in-depth.html#expressions).
 - `fst` is copied from PairUtils: it extracts the first element of a Pair holding values of two arbitrary types `'A` and `'B` (the parametric types). The transition `StringUint32Pair(.)` shows how to apply it for a Pair holding a first element of type `String` and a second one of type `Uint32` (it returns the `String` element).
 - `list_from_option` constructs a list out of an Option holding one or no value of an arbitrary type. If the option holds a value (of type `'A`, the parametric type), a one element list is returned with this value (of type `'A`). This is shown with an Option holding a `Uint32`. If the option does not hold a value (still of type `'A`, but constructed using `None`), the list returned is empty (but defined to hold elements of type `'A` nevertheless).
+
+See also [TripleTemplate.scilla](./contracts/templates/TripleTemplate.scilla) for examples of implementing typed functions to construct a triple of elements of possibly different types, and extract the individual elements again.
 
 
 ### User defined Library
