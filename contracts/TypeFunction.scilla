@@ -39,6 +39,25 @@ let list_from_option =
       Cons {'A} value empty_list
     end
 
+(* A typed function where one of the arguments is *)
+(* a function again: The builtin 'eq' can only be *)
+(* used for builtin types. Here we show how to    *)
+(* write a typed function on a general type that  *)
+(* gets the equality comparison as a function     *)
+(* and IF the function type IS a builtin type it  *)
+(* can use the builtin eq.                        *)
+(* The example is a general Pair where both ele-  *)
+(* ments are of the same type and it returns the  *)
+(* result of a comparison function applied to the *)
+(* two elements                                   *)  
+let pair_compare = 
+  tfun 'A =>
+  fun (p : Pair ('A) ('A) ) =>
+  fun (compare: 'A -> 'A -> Bool) =>
+    match p with 
+    | Pair a b => 
+      compare a b
+    end  
 
 contract TypeFunction
 ()
@@ -74,5 +93,22 @@ transition ListFromOption()
   ev = {_eventname: "ListFromOption";
     option_Uint32: option1; list_Uint32: list1;
     option_Bool: option2; list_bool: list2};
+  event ev
+end
+
+(* call the library function pair_compare for a Pair holding    *)
+(* two Uint32's and compare the entries for equality using      *)
+(* builtin 'eq'                                                 *)
+transition ArePairElementsEqual(a: Uint32, b: Uint32)
+  res = 
+    let equal = 
+      fun(x: Uint32) =>
+      fun(y: Uint32) =>
+        builtin eq x y (* use builtin eq on builtin type Uint32 *) 
+      in
+    let pair_equal = @pair_compare Uint32 in (* set type to builtin Uint32 *)
+    let pair = Pair {Uint32 Uint32} a b in (* apply it to a Pair (a,b) *)
+  pair_equal pair equal; (* use 'equal' as comparison function *)
+  ev = { _eventname: "ArePairElementsEqual"; a: a; b: b; result: res };
   event ev
 end

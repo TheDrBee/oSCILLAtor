@@ -224,9 +224,10 @@ The [SetGet smart contract](./contracts/SetGet.scilla) shows how to modify a sta
 Script: [SetGet.js](./js/SetGet.js).
 
 ### Type function
-The [TypeFunction smart contract](./contracts/TypeFunction.scilla) shows examples how to define type function with 1 or 2 arguments, and how to use them for concrete types, see `tfun: 'T => expr` in the [Scilla documentation](https://scilla.readthedocs.io/en/latest/scilla-in-depth.html#expressions).
+The [TypeFunction smart contract](./contracts/TypeFunction.scilla) shows examples how to define type function with 1 or 2 arguments, and how to use them for concrete types, see `tfun: 'T => expr` in the [Scilla documentation](https://scilla.readthedocs.io/en/latest/scilla-in-depth.html#expressions). 
 - `fst` is copied from PairUtils: it extracts the first element of a Pair holding values of two arbitrary types `'A` and `'B` (the parametric types). The transition `StringUint32Pair(.)` shows how to apply it for a Pair holding a first element of type `String` and a second one of type `Uint32` (it returns the `String` element).
 - `list_from_option` constructs a list out of an Option holding one or no value of an arbitrary type. If the option holds a value (of type `'A`, the parametric type), a one element list is returned with this value (of type `'A`). This is shown with an Option holding a `Uint32`. If the option does not hold a value (still of type `'A`, but constructed using `None`), the list returned is empty (but defined to hold elements of type `'A` nevertheless).
+- `pair_compare` compares the two elements of a `Pair` with __both__ elements of a general type `'A`. It takes a functor `compare` as argument: `compare: 'A -> 'A -> Bool`. As an example we use the builtin type `Uint32` and use the `builtin eq` as comparison operator, see `transition ArePairElementsEqual(a: Uint32, b: Uint32)`. Note that one can __not__ use `builtin eq` inside a typed function directly, as it does only work for some types but not for general types.
 
 See also [TripleTemplate.scilla](./contracts/templates/TripleTemplate.scilla) for examples of implementing typed functions to construct a triple of elements of possibly different types, and extract the individual elements again.
 
