@@ -19,8 +19,15 @@ Enter the `Option` with a JSON-style entry that gives the constructor (`None` or
 - `{ "constructor": "Some", "argtypes": ["Uint32"], "arguments": ["12"] }` for an `Option` holding the value 12. 
 
 ### List
+#### List with "simple" elements (non ADTs)
 Enter the list as an array with each of the `List`'s elements as `String`. For example to call a `transition AList(str_list: List String, int_list: List Int32)` with the two lists as arguments {'Oh', 'Hello', 'Joe'} and {1,2} enter 
 - `["Oh, "Hello", "Joe"]` (for `str_list`) and 
 - `["1", "2"]` (for `int_list`).
-
-
+#### List with ADT elements
+A List of pairs is entered as an array of the JSON-style entries for each pair. For example to call a with an argument of type `List (Pair String Uint32)` with a list holding two pairs {("a",1), ("b",2)} enter
+```
+[
+   { "constructor": "Pair", "argtypes": [ "String", "Uint32" ], "arguments": [ "a", "1" ] },
+   { "constructor": "Pair", "argtypes": [ "String", "Uint32" ], "arguments": [ "b", "2" ] } 
+]
+```
