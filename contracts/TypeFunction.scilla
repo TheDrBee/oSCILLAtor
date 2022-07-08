@@ -59,6 +59,8 @@ let pair_compare =
       compare a b
     end  
 
+type ADT = | ADT of Uint32
+
 contract TypeFunction
 ()
 
@@ -110,5 +112,30 @@ transition ArePairElementsEqual(a: Uint32, b: Uint32)
     let pair = Pair {Uint32 Uint32} a b in (* apply it to a Pair (a,b) *)
   pair_equal pair equal; (* use 'equal' as comparison function *)
   ev = { _eventname: "ArePairElementsEqual"; a: a; b: b; result: res };
+  event ev
+end
+
+(* call the library function pair_compare for a Pair holding    *)
+(* two user defined ADTs holding Uint32's                       *)
+transition ArePairElementsEqualWithADT(a: Uint32, b: Uint32)
+  aa = ADT a; (* construct ADT to use lib function with ADT *)
+  bb = ADT b;
+  res = 
+    let equal = (* extract values from ADT and only then use builtin eq *)
+      fun(x: ADT) =>
+      fun(y: ADT) =>
+        let get_val = fun(adt: ADT) => (* extract the value of type Uint32 *)
+          match adt with 
+          | ADT value => value
+          end 
+        in
+        let xx = get_val x in 
+        let yy = get_val y in (* xx and yy are now of type Uint32 *)
+        builtin eq xx yy
+      in
+    let pair_equal = @pair_compare ADT in (* set type to non builtin ADT *)
+    let pair = Pair {ADT ADT} aa bb in 
+  pair_equal pair equal; (* use 'equal' as comparison function *)
+  ev = { _eventname: "ArePairElementsEqualWithADT"; a: a; b: b; result: res };
   event ev
 end
