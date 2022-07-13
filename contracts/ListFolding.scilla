@@ -1,0 +1,89 @@
+scilla_version 0
+
+import ListUtils IntUtils
+
+(* various examples of list folding: summing up elements of a list  *)
+(* to show that accumulator and list elements can have different    *)
+(* types the list holds elements of type Uint32 and the accumulator *)
+(* (the running sum) is of type Uint64 here                         *)
+
+library ListFolding
+
+(* list_foldl: ('B -> 'A -> 'B) -> 'B -> (List 'A) -> 'B *)
+let sum_left : List Uint32 -> Uint64 =
+  fun(list: List Uint32) =>
+    let folder = @list_foldl Uint32 Uint64 in (* sum form "left" to "right" *)
+    let acc0 = Uint64 0 in (* initial sum = 0 *)
+    let adder = (* the function to apply: add up *)
+      fun(acc_now: Uint64) =>
+      fun(summand: Uint32) =>
+        let summand64_opt = builtin to_uint64 summand in
+        match summand64_opt with
+        | Some summand64 => 
+          builtin add acc_now summand64
+        | None =>
+          Uint64 0 (* should never happen *)
+        end
+    in
+    folder adder acc0 list
+
+(* list_foldr: ('A -> 'B -> 'B) -> 'B -> (List 'A) -> 'B *)
+let sum_right : List Uint32 -> Uint64 =
+  fun(list: List Uint32) =>
+    let folder = @list_foldr Uint32 Uint64 in (* sum from "right" to "left" *)
+    let acc0 = Uint64 0 in
+    let adder = 
+      fun(summand: Uint32) =>
+      fun(acc_now: Uint64) =>
+        let summand64_opt = builtin to_uint64 summand in
+        match summand64_opt with
+        | Some summand64 => 
+          builtin add acc_now summand64
+        | None =>
+          Uint64 0 (* should never happen *)
+        end
+    in
+    folder adder acc0 list
+
+(* list_foldk: ('B -> 'A -> ('B -> 'B) -> 'B) -> 'B -> (List 'A) -> 'B *)
+let sum_until : List Uint32 -> Uint64 -> Uint64 =
+  fun(list: List Uint32) =>
+  fun(stop_at: Uint64) =>
+    let folder = @list_foldk Uint32 Uint64 in (* sum up but stop if stop_at is reached *)
+    let acc0 = Uint64 0 in
+    let stepper = 
+      fun(acc_now: Uint64) =>
+      fun(summand: Uint32) =>
+      fun(recurse: (Uint64 -> Uint64)) => (* postponed recursive call *)
+        let summand64_opt = builtin to_uint64 summand in
+        match summand64_opt with
+        | Some summand64 =>
+          let acc_new = builtin add acc_now summand64 in
+          let stop = uint64_ge acc_new stop_at in
+          match stop with
+          | True => acc_new (* acc_new is >= stop_at: STOP *)
+          | False => recurse acc_new (* acc_new is < stop_at: CONTINUE with recursion *)
+          end
+        | None =>
+          Uint64 0 (* should never happen *)
+        end
+    in
+    folder stepper acc0 list
+
+contract ListFolding()
+
+
+transition Test(list: List Uint32)
+  res_l = sum_left  list;
+  res_r = sum_right list;
+  res_10 = 
+    let ten = Uint64 10 in (* sum up but stop if sum >= 10 *)
+  sum_until list ten; 
+  ev = {
+    _eventname: "Sum"; 
+    sum_from_left: res_l; 
+    sum_from_right: res_r;
+    sum_until_10: res_10
+  };
+  event ev
+end

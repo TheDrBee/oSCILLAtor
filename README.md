@@ -136,10 +136,14 @@ The [List smart contract](./contracts/List.scilla) shows list manipulations and 
 - compute element wise difference between two lists (r[i] = l1[i] - l2[i] ) applying `list_zip_with`, see `Difference321Minus111()`
 - compare two lists and create a list of booleans applying `list_zip_with`, see `Compare123To321()`
 - apply a procedure to compute twice the value of each element and store the result in a map (m[l_i] = 2*l_i) applying `forall`, see `ComputeDoubles()`
-- compute the sum of all elements in a list applying a left fold (`list_foldl`), see `SumElements112()`
 - check if two lists are disjunct, i.e. have no common element(s): This applies `list_forall` twice, by checking for each element in the first list if it is different to all values in a second list, see `are_lists_disjunct` and the transition `AreListsDisjunct()` which tests this for a few lists.
 - count the number of occurences of a value in a list: This applies a left fold `list_foldl` to a list where the accumulator is increased by one if an element of the list matches a given value (and remains equal if not). See `count_in_list` and the tranition `Count(.)` which tests this by counting how many 1's there are in a few lists.
 - check if a list is "unique" in the sense that each element of it is unique (i.e., it's only once in the list). This applies above `count_in_list` using a `list_for_all` to each element of the same list (and checks the result of each count against 1). See `is_unique` and the transition `CheckUniqueness` which tests this for a few lists.
+
+The [ListFolding smart contract](./contracts/ListFolding.scilla) contracts also shows examples of list folding operations to compare them. It uses the folding operations to sum up elements in a list:
+- `sum_left` applies `list_foldl` to sum the list elements "from left to right", i.e. starting at element 0. See also `count_in_list` in [List smart contract](./contracts/List.scilla) for another example of `list_foldl`.
+- `sum_right` applies `list_foldr` to sum the list elements "from right to left", i.e. starting at element n-1.
+- `sum_until` applies `list_foldk` to sum the list elements but stop once the sum has reached `stop_at`.
 
 Script: [List.js](./js/List.js).
 

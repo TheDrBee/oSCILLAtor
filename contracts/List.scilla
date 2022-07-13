@@ -57,7 +57,6 @@ let are_lists_disjunct =
     let for_allUint32 = @list_forall Uint32 in
     for_allUint32 f l1 (* apply now this f to l1 *)
 
-
 (* count the number of occurences of a value in a list *)
 let count_in_list =
   fun(l: List Uint32) =>
@@ -155,20 +154,6 @@ end
 transition ComputeDoubles()
   l <- list;
   forall l Twice (* apply Twice(.) to each element *)
-end
-
-(* sum the elements of a list using a left fold: res = 1 + 1 + 2 = 4 *)
-transition SumElements112()
-  l = create_3el_list one one two; (* [1, 1, 2] *)
-  folder = @list_foldl Uint32 Uint32; (* accumulator and list elements are of type Uint32 *)
-  sum_of_elements =
-    let init = Uint32 0 in (* initialize the accumulator at 0 *)
-    let addition = (* add elements to accumulator: a + b *)
-      fun(a: Uint32) => fun(b: Uint32) =>
-        builtin add a b in
-    folder addition init l;
-  ev = {_eventname: "SumElements112"; sum: sum_of_elements};
-  event ev
 end
 
 (* check if two lists l1 and l2 have at least one common element  *)
