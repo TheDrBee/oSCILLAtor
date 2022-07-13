@@ -2,8 +2,8 @@ scilla_version 0
 
 import ListUtils IntUtils
 
-(* various examples of list folding: summing up elements of a list  *)
-(* to show that accumulator and list elements can have different    *)
+(* Various examples of list folding: summing up elements of a list. *)
+(* To show that accumulator and list elements can have different    *)
 (* types the list holds elements of type Uint32 and the accumulator *)
 (* (the running sum) is of type Uint64 here                         *)
 
