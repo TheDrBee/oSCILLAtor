@@ -45,3 +45,32 @@ To start immediately without deploying your own contracts you can use the contra
 UnixTimeOracle: '0x70b5025c9c7e1d07e0f472c9b19d4382f5fbf2a8'
 OracleClient: '0x262edaf09efb97abf69474ae56485fb46dab86ee'
 ```
+
+### Sample output
+```
+$ node listener.js 
+ .. will work with oracle @ 0x70b5025C9c7E1D07E0F472C9B19D4382F5FBF2a8
+get SubscribeEventLog echo :  {
+  query: 'EventLog',
+  addresses: [ '0x70b5025c9c7e1d07e0f472c9b19d4382f5fbf2a8' ]
+}
+get new event log:  {"query":"EventLog"}
+get new event log:  {"query":"EventLog","value":[{"address":"70b5025c9c7e1d07e0f472c9b19d4382f5fbf2a8","event_logs":[{"_eventname":"GetUnixTime","params":[{"type":"ByStr20","value":"0x262edaf09efb97abf69474ae56485fb46dab86ee","vname":"from"},{"type":"Uint32","value":"0","vname":"request_id"}]}]}]}
+ -> event with _eventname = GetUnixTime received from 0x262edaf09efb97abf69474ae56485fb46dab86ee with request id = 0!
+ .. current unix time stamp [s]: 1657795799
+get new event log:  {"query":"EventLog"}
+get new event log:  {"query":"EventLog","value":[{"address":"70b5025c9c7e1d07e0f472c9b19d4382f5fbf2a8","event_logs":[{"_eventname":"SetUnixTime","params":[{"type":"Uint64","value":"1657795799","vname":"unix_time"}]}]}]}
+ ==> Success of request with id 0: uxt = 1657795799 written to oracle @ 0x70b5025c9c7e1d07e0f472c9b19d4382f5fbf2a8 and sent to callback of 0x262edaf09efb97abf69474ae56485fb46dab86ee
+get new event log:  {"query":"EventLog"}
+get new event log:  {"query":"EventLog"}
+get new event log:  {"query":"EventLog"}
+get new event log:  {"query":"EventLog"}
+get new event log:  {"query":"EventLog","value":[{"address":"70b5025c9c7e1d07e0f472c9b19d4382f5fbf2a8","event_logs":[{"_eventname":"GetUnixTime","params":[{"type":"ByStr20","value":"0x262edaf09efb97abf69474ae56485fb46dab86ee","vname":"from"},{"type":"Uint32","value":"1","vname":"request_id"}]}]}]}
+ -> event with _eventname = GetUnixTime received from 0x262edaf09efb97abf69474ae56485fb46dab86ee with request id = 1!
+ .. current unix time stamp [s]: 1657796498
+get new event log:  {"query":"EventLog"}
+get new event log:  {"query":"EventLog","value":[{"address":"70b5025c9c7e1d07e0f472c9b19d4382f5fbf2a8","event_logs":[{"_eventname":"SetUnixTime","params":[{"type":"Uint64","value":"1657796498","vname":"unix_time"}]}]}]}
+ ==> Success of request with id 1: uxt = 1657796498 written to oracle @ 0x70b5025c9c7e1d07e0f472c9b19d4382f5fbf2a8 and sent to callback of 0x262edaf09efb97abf69474ae56485fb46dab86ee
+get new event log:  {"query":"EventLog"}
+...
+```
