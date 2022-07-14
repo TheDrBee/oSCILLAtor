@@ -3,17 +3,19 @@
 ## Overview
 Examples and Snippets of the [scilla programming language](https://scilla.readthedocs.io/en/latest/) and the [Zilliqa JS lib](https://github.com/Zilliqa/Zilliqa-JavaScript-Library).
 
-Contracts are all in folder `contracts/`. The subdirectory `templates` containts scilla contracts that are "ready to use" implementations of best practices (see [Templates](#templates)) - of course "AS IS", see [LICENSE](./LICENSE) without any warranty.
+- __Contracts__ are in sub directory `contracts/`. The subdirectory `templates` containts scilla contracts that are "ready to use" implementations of best practices (see [Templates](#templates)) - of course "AS IS", see [LICENSE](./LICENSE) without any warranty.
 
-Scripts using the [Zilliqa JS lib](https://github.com/Zilliqa/Zilliqa-JavaScript-Library) that deploy the contracts and interact with them through their transitions are in folder `js/`. They are run in that directory using: `node <ScriptName.js>`.
+- __JS Scripts__ using the [Zilliqa JS lib](https://github.com/Zilliqa/Zilliqa-JavaScript-Library) that deploy the contracts and interact with them through their transitions are in sub directory `js/`. They are run in that directory using: `node <ScriptName.js>`.
 
-We also collect some tipps and tricks for using the IDE [here](./IDE-HINTS.md).
+- We also collect some tipps and tricks for using the __IDE__ [here](./IDE-HINTS.md).
+
+- An example of an __oracle__ implementation with client contract, oracle contract and a listener that fullfills requests in JS in order to receive off-chain data is in sub directory `oracle/`, see [README](./oracle/README.md).
 
 ## Installation
 ```bash
 yarn  # install Zilliqa JS and required dependencies
 ```
-In order to run the JS scripts install [ceres](https://github.com/Zilliqa/ceres/releases) (needs docker), and start the "Isolated server".
+In order to run the JS scripts for the individual contracts install [ceres](https://github.com/Zilliqa/ceres/releases) (needs docker), and start the "Isolated server".
 
 ## Templates
 Ready-to-use implementations to start building.
