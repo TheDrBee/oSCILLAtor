@@ -1,0 +1,43 @@
+scilla_version 0
+
+library OracleClient
+
+(* error/exception codes *)
+let ec_not_oracle    = Int32  -1 (* transition not invoked by the oracle *)
+
+contract OracleClient(oracle: ByStr20 with contract end)
+
+field uxt: Uint64 = Uint64 0
+
+(* @notice: request current time stamp from oracle by calling its               *)
+(*          transition GetUnixTime()                                            *)
+transition Request()
+  singleton_list =
+    let zero = Uint128 0 in
+    let msg = {
+      _tag: "GetUnixTime";
+      _recipient: oracle;
+      _amount: zero
+    } in
+    let nil_msg = Nil {Message} in
+    Cons {Message} msg nil_msg;
+  send singleton_list
+end
+
+(* @notice: callback function that oracle should call when asked for time stamp *)
+(* @param:  unix_time: the time stamp in seconds since JAN 01 1970. (UTC)       *)
+transition UnixTimeCallback(unix_time: Uint64)
+  is_oracle = builtin eq oracle _sender;
+  match is_oracle with
+  | False =>
+    err = {_exception: "Error"; code: ec_not_oracle};
+    throw err
+  | True =>
+    uxt := unix_time;
+    ev = {
+      _eventname : "UnixTimeCallbackSuccess";
+      unix_time: unix_time
+    };
+    event ev
+  end
+end

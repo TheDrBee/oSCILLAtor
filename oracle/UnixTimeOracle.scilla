@@ -1,0 +1,88 @@
+scilla_version 0
+
+import IntUtils BoolUtils
+
+library UnixTimeOracle
+
+let min_uxt = Uint64 1577833200 (*  1 Jan 2020, 00:00:00 *)
+let max_uxt = Uint64 4765129199 (* 31 Dec 2120, 23:59:59 *)
+
+let chk_uxt: (* check min_uxt <= uxt <= max_uxt *)
+  Uint64 -> Bool =
+    fun(uxt: Uint64) =>
+      let is_ge_min = uint64_ge uxt min_uxt in
+      let is_le_max = uint64_le uxt max_uxt in
+      andb is_ge_min is_le_max
+
+(* error/exception codes *)
+let ec_uxt_invalid          = Int32  -1 (* unix time stamp not within limits or older *)
+let ec_request_id_invalid   = Int32  -2 (* no request exists for given request id *)
+
+contract UnixTimeOracle()
+
+field last_unix_time: Uint64 = Uint64 0
+field requests: Map Uint32 ByStr20 = Emp Uint32 ByStr20
+field request_id: Uint32 = Uint32 0
+
+(* throw excepton with an error code *)
+procedure Throw(ec: Int32)
+  err = {_exception: "Error"; code: ec};
+  throw err
+end
+
+(* throw error if uxt is not within limits or older than previous one *)
+procedure ThrowIfUxtInvalid(uxt: Uint64)
+  is_within_limits = chk_uxt uxt;
+  match is_within_limits with
+  | False => Throw ec_uxt_invalid
+  | True =>
+    last <- last_unix_time;
+    is_not_older = uint64_ge uxt last;
+    match is_not_older with
+    | False => Throw ec_uxt_invalid
+    | True => (* all good *)
+    end
+  end
+end
+
+(* @notice: client calls this transition to get unix time stamp in its callback *)
+(*          transition UnixTimeCallback(unix_time: Uint64)                      *)
+transition GetUnixTime()
+  id <- request_id;
+  requests[id] := _sender;
+  next =
+    let one = Uint32 1 in
+  builtin add id one;
+  request_id := next;
+  ev = {_eventname : "GetUnixTime"; from: _sender; request_id: id};
+  event ev
+end
+
+(* @notice: Set a unix time stamp and send msg to requestor                     *)
+(* @param: uxt  unix time stamp in seconds sindce jan 01 1970 (UTC),            *)
+(*              e.g. 1648044067                                                 *)
+(* @param: request_id the id of the request                                     *)
+(* TOODO: check only an authorized address can call this                        *)
+transition SetUnixTime(uxt: Uint64, request_id: Uint32)
+  ThrowIfUxtInvalid uxt;
+  last_unix_time := uxt;
+  requestor_opt <- requests[request_id];
+  match requestor_opt with
+  | None => Throw ec_request_id_invalid
+  | Some requestor =>
+    delete requests[request_id];
+    singleton_list =
+      let zero = Uint128 0 in
+      let msg = {
+        _tag: "UnixTimeCallback";
+        _recipient: requestor;
+        _amount: zero;
+        unix_time: uxt
+      } in
+      let nil_msg = Nil {Message} in
+    Cons {Message} msg nil_msg;
+    send singleton_list;
+    ev = {_eventname : "SetUnixTime"; unix_time: uxt};
+    event ev
+  end
+end

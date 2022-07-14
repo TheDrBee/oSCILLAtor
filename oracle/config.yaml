@@ -1,0 +1,4 @@
+files:
+  oracle: 'UnixTimeOracle.scilla'
+  client: 'OracleClient.scilla'
+  addresses: 'addresses.yaml'
