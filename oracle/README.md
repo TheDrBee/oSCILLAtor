@@ -2,7 +2,7 @@
 This is an example of a simple oracle that can be used to get the current [unix timestamp](https://en.wikipedia.org/wiki/Unix_time) on to the Zilliqa blockchain. The current unix time stamp can be seen [here](https://www.unixtimestamp.com/), and it can also be received directly in JS (using `Date.now()` which gives it in ms since Jan 01 1970 UTC). The example uses the unix time in seconds from JS (but can easily be changed to get it from an api), and it runs on testnet.
 
 ## Note / Warning
-The implementation here is kept simple to show the main concepts but it is __not__ safe: Any account can call the transition to update data on the oracle. Namely, not just an *authorized* account in the listener but also a potentially malicius caller (with, e.g., a wrong time stamp).
+The implementation here is kept simple to show the main concepts but it is __not__ safe: Any account can call the transition to update data on the oracle. Namely, not just an *authorized* account in the listener but also a potentially malicious caller (with, e.g., a wrong time stamp).
 
 ## Overview
 ### Contracts
