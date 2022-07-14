@@ -9,13 +9,13 @@ The implementation here is kept simple to show the main concepts but it is __not
 - [UnixTimeOracle](./UnixTimeOracle.scilla) is the oracle contract. It has transitions to
   - Request a unix time stamp: `transition GetUnixTime()`. A client contract will call this transition to receive the latest unix time stamp. If called, it stores the request under an id and emits an event with `_eventname: GetUnixTime` and having the paramters `from` (who requested this) and the `request_id`.
   - Set unix time and fullfill the request: `transition SetUnixTime(uxt: Uint64, request_id: Uint32)`. It checks if the unix time can be valid and ensures it is not older than a previous time stamp received. If valid, it calls the callback of the requesting contract (identified throught the `request_id`) with the current time stamp: `transition UnixTimeCallback(unix_time: Uint64)`.
-- [OracleClient](./OracleClient.scilla) is the client contract to request a unix time stamp (off chain data) from the above oracle contract whose address is one of its deployment parameters (immuatable). It has transitions to:
+- [OracleClient](./OracleClient.scilla) is the client contract to request a unix time stamp (off chain data) from the above oracle contract whose address is one of its deployment parameters (immutable or `init` variables). It has transitions to:
   - Request a time stamp: `transition Request()` which calls the oracle contract's transition `GetUnixTime()`. This starts the on-chain call graph.
   - Receive the unix time stamp from the oracle in a callback: `transition UnixTimeCallback(unix_time: Uint64)` which finishes the call graph.
 
 ### Scripts
-- [deploy.js](./deploy.js) to deploy both contracts on testnet and store their addresses.
-- [listener.js](./listener.js) subscibes to the oracle contract (websocket) and listens to its events. It gets its address from the [address file](./addresses.yaml). If an event to get a unix time stamp is received the current unix time is computed (off-chain) and the [oracle contracts](./UnixTimeOracle.scilla)'s transition `SetUnixTime(.)` is called.
+- [deploy.js](./deploy.js) to deploy both contracts on testnet and store their addresses in an [address file](./addresses.yaml).
+- [listener.js](./listener.js) subscibes to the [oracle contracts](./UnixTimeOracle.scilla) (websocket) and listens to its events. It gets the address of the oracle contract to subscribe to from the [address file](./addresses.yaml). If an event to get a unix time stamp is received the current unix time is computed (off-chain) and the oracle contract's transition `SetUnixTime(.)` is called.
 
 ## How To
 
