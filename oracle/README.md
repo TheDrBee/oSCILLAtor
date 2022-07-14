@@ -20,12 +20,12 @@ The implementation here is kept simple to show the main concepts but it is __not
 ## How To
 
 ### Pre
-You need to add a secrets file with private keys for the account to deploy the contracts (`deployer`) an the account to write to the oracle contract by calling a transition on it (`oracle_caller`) of the following form:
+You need to add a secrets file with private keys for the account to deploy the contracts (`deployer`) and for the account to write to the oracle contract by calling a transition on it (`oracle_caller`). The file has to be called "secrets.yaml", be placed in the `oracle\` sub directory, and it must have the two entries as follows:
 ```{yaml}
 deployer: 5a08d91...216e
 oracle_caller: 5a08d91....a1216e
 ```
-with one or two private keys of testnet account(s) that own some testnet ZIL.
+Replace the '5a08...216e' above with your private testnet keys. `deployer` and `oracle_caller` can be the same account, or two different ones. Hence, the file will contain one or two private keys of testnet account(s) that own some testnet ZIL.
 
 ### Deployment
 `$ node deploy`
