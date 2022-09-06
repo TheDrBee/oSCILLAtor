@@ -1,9 +1,10 @@
-(* Two examples how to implement recursive function calls using
+(* Three examples how to implement recursive function calls using
    nat_fold and the builtin ADT Nat
    1) Adapted version of an example by Amrit that uses
     recursion to build a list [m, m+1, ..., n-2, n-1] where
     m and n are parameters
-   2) Compute the factorial of a parameter n:
+   2) Simplified version to build a list of length n with each element = v
+   3) Compute the factorial of a parameter n:
     n! = 0 if n=0,
     n! = n * (n-1) * ... * 1 if n>0                              *)
 
@@ -15,24 +16,23 @@ library Recursion
 
 let zero32 = Uint32 0
 let one32 = Uint32 1
-let empty_list = Nil {Uint32}
 
 let build_list : Uint32 -> Uint32 -> List Uint32 =
   fun (m : Uint32) =>
   fun (n : Uint32) =>
+    let empty_list = Nil {Uint32} in
     let m_lt_n = builtin lt m n in (* if m >= n the list is empty *)
     match m_lt_n with
     | True =>
         let delta = builtin sub n m in
         let delta_nat = builtin to_nat delta in
         let acc_init = Pair {(List Uint32) Uint32} empty_list n in
-        let one = Uint32 1 in
         let step =
           fun (xs_n : Pair (List Uint32) Uint32) =>
           fun (ignore : Nat) =>
           match xs_n with
           | Pair xs n =>
-              let new_n = builtin sub n one in
+              let new_n = builtin sub n one32 in
               let new_xs = Cons {Uint32} new_n xs in
               Pair {(List Uint32) Uint32} new_xs new_n
           end in
@@ -43,6 +43,28 @@ let build_list : Uint32 -> Uint32 -> List Uint32 =
         end
     | False => empty_list
     end (* m_lt_n *)
+
+let build_list_n : Uint32 -> Int128 -> List Int128 =
+  fun (n : Uint32) =>
+  fun (v : Int128) => 
+    let empty_list = Nil {Int128} in
+    let n_nat = builtin to_nat n in
+    let acc_init = Pair {(List Int128) Uint32} empty_list n in
+    let step =
+      fun (list_n : Pair (List Int128) Uint32) =>
+      fun (ignore : Nat) =>
+        match list_n with
+        | Pair l n =>
+          let new_n = builtin sub n one32 in
+          let new_l = Cons {Int128} v l in
+          Pair {(List Int128) Uint32} new_l new_n
+        end in
+        let fold = @nat_fold (Pair (List Int128) Uint32) in (* from NatUtils *)
+        let final = fold step acc_init n_nat in
+        match final with
+        | Pair list n => list
+        end
+
 
 let factorial : Uint32 ->  Uint32 =
   fun (n : Uint32) =>
@@ -80,11 +102,18 @@ contract Recursion()
 
 (* create the list [m, m+1, ..., n-1] *)
 transition CreateList(m : Uint32, n : Uint32)
- l = build_list m n;
- e = {_eventname : "CreateList"; list : l};
- event e
+  l = build_list m n;
+  e = {_eventname : "CreateList"; list : l};
+  event e
 end
 
+(* create the list with n elements equal to v, ie. [v, v, ... v] of length n *)
+transition CreateListN(n: Uint32, v: Int128)
+  l = build_list_n n v;
+  e = {_eventname: "CreateListN"; list: l};
+  event e
+end
+  
 (* compute n! *)
 transition Factorial(n: Uint32)
   f = factorial n;
